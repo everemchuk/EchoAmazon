@@ -1,0 +1,3 @@
+## EchoAmazon
+
+**This project focuses on building EchoAmazon, a unified e-commerce ecosystem that integrates advanced voice-assistant capabilities directly into a comprehensive online marketplace. It is a technical challenge designed to bridge the gap between conversational AI and retail, providing a seamless personal assistant that helps users explore, vet, and purchase goods through natural interaction.**
