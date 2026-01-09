@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+export function getStaticPaths() {
+	return [{ params: { slug: "sample-product" } }];
+}
+
+const { slug } = Astro.params;
+---
+
+<BaseLayout title={`Product - ${slug}`} />

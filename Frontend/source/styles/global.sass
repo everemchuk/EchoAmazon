@@ -1,0 +1,39 @@
+@use 'vars' as *
+
+*, *::before, *::after
+  box-sizing: border-box
+  margin: 0
+  padding: 0
+
+html
+  font-family: $font-family-base
+  background-color: $background-color
+  color: $text-color
+  line-height: 1.5
+
+body
+  min-height: 100vh
+  display: flex
+  flex-direction: column
+
+a
+  text-decoration: none
+  color: inherit
+  transition: color 0.2s ease
+
+  &:hover
+    color: $primary-color
+
+ul, ol
+  list-style: none
+
+button
+  cursor: pointer
+  font-family: inherit
+  border: none
+  background: none
+
+img
+  max-width: 100%
+  height: auto
+  display: block
