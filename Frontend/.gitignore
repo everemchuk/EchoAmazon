@@ -4,7 +4,7 @@ build/
 .astro/
 
 ARCH.md
-.vscode
+.vscode/
 
 # dependencies
 node_modules/
