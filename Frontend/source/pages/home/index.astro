@@ -1,5 +1,99 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Logo from "../../components/Logo.astro";
 ---
 
-<BaseLayout title="EchoAmazon - Home" />
+<BaseLayout title="EchoAmazon - Home" activePage="home">
+	<div class="container">
+		<div class="logo-container">
+			<Logo />
+		</div>
+		<h1>Welcome to EchoAmazon</h1>
+		<p>Experience the future of shopping.</p>
+		<button id="theme-toggle">Toggle Theme</button>
+	</div>
+</BaseLayout>
+
+<script>
+	function initThemeToggle() {
+		const toggleButton = document.getElementById("theme-toggle");
+		const htmlElement = document.documentElement;
+
+		if (!toggleButton) return;
+
+		// Clone to strip existing listeners
+		const newBtn = toggleButton.cloneNode(true);
+		toggleButton.parentNode?.replaceChild(newBtn, toggleButton);
+		const activeBtn = document.getElementById("theme-toggle");
+
+		activeBtn?.addEventListener("click", () => {
+			const currentTheme = htmlElement.getAttribute("data-theme");
+			const newTheme = currentTheme === "dark" ? "light" : "dark";
+			htmlElement.setAttribute("data-theme", newTheme);
+			localStorage.setItem("theme", newTheme);
+		});
+	}
+
+	// Run only on astro:page-load (handles initial load + transitions)
+	document.addEventListener("astro:page-load", initThemeToggle);
+</script>
+
+<style lang="sass">
+	@use '../../styles/vars' as *
+
+	.container
+		display: flex
+		flex-direction: column
+		align-items: center
+		justify-content: center
+		min-height: 80vh
+		text-align: center
+		padding: 1rem
+
+		@include respond-to($tablet)
+			padding: 2rem
+
+	.logo-container
+		width: 150px
+		margin-bottom: 1rem
+
+		@include respond-to($tablet)
+			width: 200px
+			margin-bottom: 2rem
+
+	h1
+		font-family: $font-family-heading
+		font-size: 2rem
+		margin-bottom: 0.5rem
+		color: var(--primary-color)
+
+		@include respond-to($tablet)
+			font-size: 3rem
+			margin-bottom: 1rem
+
+	p
+		font-size: 1rem
+
+		@include respond-to($tablet)
+			font-size: 1.25rem
+
+	button
+		margin-top: 1.5rem
+		padding: 0.5rem 1rem
+		font-size: 0.875rem
+		border: 2px solid var(--primary-color)
+		border-radius: 4px
+		color: var(--text-color)
+		transition: all 0.2s
+		background: none
+		cursor: pointer
+
+		@include respond-to($tablet)
+			margin-top: 2rem
+			padding: 0.75rem 1.5rem
+			font-size: 1rem
+
+		&:hover
+			background-color: var(--primary-color)
+			color: var(--bg-color)
+</style>

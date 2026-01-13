@@ -2,4 +2,26 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="Shop" />
+<BaseLayout title="EchoAmazon - Store" activePage="store">
+	<div class="page-header">
+		<h1>Store</h1>
+	</div>
+	<div class="page-content">
+		<p>Explore our products.</p>
+	</div>
+</BaseLayout>
+
+<style lang="sass">
+	@use '../../styles/vars' as *
+
+	.page-header
+		margin-bottom: 2rem
+
+		h1
+			font-family: $font-family-heading
+			font-size: 2.5rem
+			color: var(--text-color)
+
+	.page-content
+		color: var(--text-color)
+</style>

@@ -1,17 +1,24 @@
 // Colors
-$primary-color: #007185
-$secondary-color: #232f3e
-$accent-color: #ff9900
-$text-color: #333
-$background-color: #f3f3f3
-$white: #ffffff
+$dark: #1F1F1F
+$dark-grey: #545554
+$grey: #898989
+$light-grey: #BDBEBE
+$light: #F2F3F4
+
+$orange: #FB9B03
+$blue: #0178B9
 
 // Fonts
-$font-family-base: 'Inter', system-ui, -apple-system, sans-serif
-$font-family-heading: 'Outfit', sans-serif
+$font-family-base: 'Amazon Ember', system-ui, -apple-system, sans-serif
+$font-family-heading: 'Amazon Ember Display', sans-serif
 
 // Breakpoints
 $mobile: 480px
 $tablet: 768px
 $desktop: 1024px
 $wide: 1200px
+
+// Mixins
+=respond-to($breakpoint)
+  @media (min-width: $breakpoint)
+    @content

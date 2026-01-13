@@ -1,5 +1,19 @@
 @use 'vars' as *
 
+:root
+  --bg-color: #{$light}
+  --text-color: #{$dark}
+  --primary-color: #{$blue}
+  --secondary-bg: #{$light-grey}
+  --border-color: #{$light-grey}
+
+[data-theme="dark"]
+  --bg-color: #{$dark}
+  --text-color: #{$light}
+  --primary-color: #{$orange}
+  --secondary-bg: #{$dark-grey}
+  --border-color: #{$grey}
+
 *, *::before, *::after
   box-sizing: border-box
   margin: 0
@@ -7,8 +21,8 @@
 
 html
   font-family: $font-family-base
-  background-color: $background-color
-  color: $text-color
+  background-color: var(--bg-color)
+  color: var(--text-color)
   line-height: 1.5
 
 body
@@ -22,7 +36,7 @@ a
   transition: color 0.2s ease
 
   &:hover
-    color: $primary-color
+    color: var(--primary-color)
 
 ul, ol
   list-style: none

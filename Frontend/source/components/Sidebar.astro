@@ -1,0 +1,302 @@
+---
+import { Icon } from "astro-icon/components";
+import Logo from "./Logo.astro";
+
+interface Props {
+	activePage?: string;
+}
+
+const { activePage = "home" } = Astro.props;
+
+const navItems = [
+	{ name: "home", label: "Home", href: "/home" },
+	{ name: "store", label: "Store", href: "/store" },
+	{ name: "news", label: "News", href: "/news" },
+	{ name: "help", label: "Help Center", href: "/help" },
+	{ name: "cart", label: "Cart", href: "/cart" },
+];
+---
+
+<aside class="sidebar" id="sidebar">
+	<div class="sidebar-header">
+		<a href="/home" class="logo-link">
+			<Logo width="100%" />
+		</a>
+	</div>
+
+	<nav class="sidebar-nav">
+		<ul>
+			{
+				navItems.map((item) => {
+					const isActive = activePage === item.name;
+					const iconName = isActive ? `${item.name}-active` : item.name;
+
+					return (
+						<li>
+							<a
+								href={item.href}
+								class={`nav-link ${isActive ? "active" : ""}`}
+								aria-label={item.label}
+							>
+								<div class="icon-container">
+									<Icon name={iconName} size={24} />
+								</div>
+							</a>
+						</li>
+					);
+				})
+			}
+		</ul>
+	</nav>
+
+	<div class="sidebar-footer">
+		<a
+			href="/signin"
+			class={`nav-link ${activePage === "signin" ? "active" : ""}`}
+			aria-label="Sign In"
+		>
+			<div class="icon-container">
+				<Icon
+					name={activePage === "signin" ? "sign-in-active" : "sign-in"}
+					size={24}
+				/>
+			</div>
+		</a>
+	</div>
+</aside>
+
+<button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle Menu">
+	<svg
+		class="arrow-icon"
+		viewBox="0 0 24 24"
+		width="24"
+		height="24"
+		stroke="currentColor"
+		stroke-width="2"
+		fill="none"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+	>
+		<polyline points="15 18 9 12 15 6"></polyline>
+	</svg>
+</button>
+
+<div class="overlay" id="sidebar-overlay"></div>
+
+<script>
+	function initSidebar() {
+		console.log("Initializing Sidebar...");
+		const sidebar = document.getElementById("sidebar");
+		const overlay = document.getElementById("sidebar-overlay");
+		const toggleBtn = document.getElementById("sidebar-toggle");
+
+		if (!sidebar || !toggleBtn) {
+			console.error("Sidebar elements not found");
+			return;
+		}
+
+		// Remove existing listeners to prevent duplicates (if any)
+		const newBtn = toggleBtn.cloneNode(true);
+		toggleBtn.parentNode?.replaceChild(newBtn, toggleBtn);
+		const activeBtn = document.getElementById("sidebar-toggle");
+
+		function toggleSidebar() {
+			console.log("Toggling sidebar...");
+			document.body.classList.toggle("sidebar-toggled");
+			activeBtn?.classList.toggle("open");
+
+			if (window.innerWidth < 1024) {
+				overlay?.classList.toggle("active");
+			}
+		}
+
+		function closeSidebar() {
+			console.log("Closing sidebar...");
+			document.body.classList.remove("sidebar-toggled");
+			activeBtn?.classList.remove("open");
+			overlay?.classList.remove("active");
+		}
+
+		activeBtn?.addEventListener("click", (e) => {
+			e.stopPropagation();
+			toggleSidebar();
+		});
+
+		overlay?.addEventListener("click", closeSidebar);
+
+		document.addEventListener("keydown", (e) => {
+			if (e.key === "Escape") closeSidebar();
+		});
+	}
+
+	// Only use astro:page-load to handle both initial load and transitions
+	document.addEventListener("astro:page-load", initSidebar);
+</script>
+
+<style lang="sass">
+	@use '../styles/vars' as *
+
+	.sidebar
+		position: fixed
+		top: 0
+		left: 0
+		height: 100vh
+		width: 100px
+		background-color: var(--bg-color)
+		border-right: 1px solid var(--border-color)
+		display: flex
+		flex-direction: column
+		padding: 0 1rem 2rem 1rem
+		z-index: 1000
+		transform: translateX(-100%)
+		transition: transform 0.3s ease-in-out
+		align-items: center
+		overflow-y: auto // Enable vertical scrolling
+		scrollbar-width: none // Hide scrollbar Firefox
+
+		&::-webkit-scrollbar // Hide scrollbar Chrome/Safari/Edge
+			display: none
+
+		// Mobile: Open when body has .sidebar-toggled
+		:global(body.sidebar-toggled) &
+			transform: translateX(0)
+
+		@include respond-to($tablet)
+			width: 120px
+			transform: translateX(0) // Default open on tablet/desktop
+			position: fixed
+
+			// Tablet/Desktop: Closed when body has .sidebar-toggled
+			:global(body.sidebar-toggled) &
+				transform: translateX(-100%)
+
+	.sidebar-header
+		display: flex
+		justify-content: center
+		align-items: center
+		margin-bottom: 4rem
+		padding-top: 1rem
+		width: 100%
+
+		.logo-link
+			width: 50px
+			display: flex
+			justify-content: center
+
+	.sidebar-nav
+		flex-grow: 1
+		width: 100%
+		display: flex
+		flex-direction: column
+		justify-content: center
+
+		ul
+			display: flex
+			flex-direction: column
+			gap: 1.5rem
+			align-items: center
+
+	.nav-link
+		display: flex
+		align-items: center
+		justify-content: center
+		padding: 0.75rem
+		border-radius: 12px
+		color: var(--text-color)
+		transition: all 0.2s ease
+
+		&:hover
+			background-color: var(--secondary-bg)
+			color: var(--primary-color)
+
+		&.active
+			color: var(--primary-color)
+			background-color: transparent // Removed background for active state
+
+		.icon-container
+			width: 24px
+			height: 24px
+			display: flex
+			align-items: center
+			justify-content: center
+			color: currentColor
+
+	.sidebar-footer
+		margin-top: auto
+		padding-top: 4rem
+		border-top: none
+		width: 100%
+		display: flex
+		flex-direction: column
+		gap: 1.5rem
+		align-items: center
+		justify-content: center
+
+	.overlay
+		position: fixed
+		top: 0
+		left: 0
+		width: 100%
+		height: 100%
+		background-color: rgba(0, 0, 0, 0.5)
+		z-index: 999
+		opacity: 0
+		visibility: hidden
+		transition: all 0.3s ease
+
+		&.active
+			opacity: 1
+			visibility: visible
+
+		@include respond-to($tablet)
+			display: none
+
+	.sidebar-toggle
+		display: flex
+		align-items: center
+		justify-content: center
+		width: 40px
+		height: 40px
+		border-radius: 50%
+		background-color: var(--bg-color)
+		border: 1px solid var(--border-color)
+		cursor: pointer
+		z-index: 1100
+		position: fixed
+		top: 1rem // Moved to top
+		left: 1rem // Default (Mobile Closed) with gap
+		color: var(--text-color)
+		transition: left 0.3s ease-in-out, transform 0.3s ease-in-out
+
+		// Mobile: When open, move with sidebar + gap
+		:global(body.sidebar-toggled) &
+			left: calc(100px + 1rem)
+
+		@include respond-to($tablet)
+			left: calc(120px + 1rem) // Sidebar width + gap (default open)
+
+			// Tablet/Desktop: When closed, move to edge + gap
+			:global(body.sidebar-toggled) &
+				left: 1rem
+
+		.arrow-icon
+			transition: transform 0.3s ease-in-out
+			transform: rotate(180deg) // Default (Mobile): Points Right (>)
+
+		// Mobile Open: Points Left (<)
+		:global(body.sidebar-toggled) & .arrow-icon
+			transform: rotate(0deg)
+
+		@include respond-to($tablet)
+			.arrow-icon
+				transform: rotate(0deg) // Default (Tablet/Desktop): Points Left (<)
+
+			// Tablet/Desktop Closed: Points Right (>)
+			:global(body.sidebar-toggled) & .arrow-icon
+				transform: rotate(180deg)
+
+	// Freeze scroll on mobile when sidebar is open
+	@media (max-width: 767px)
+		:global(body.sidebar-toggled)
+			overflow: hidden
+</style>

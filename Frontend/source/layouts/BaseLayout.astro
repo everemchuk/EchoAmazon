@@ -1,12 +1,20 @@
 ---
 import "../styles/global.sass";
+import Fonts from "../components/Fonts.astro";
+import Sidebar from "../components/Sidebar.astro";
+import { ViewTransitions, fade } from "astro:transitions";
 
 interface Props {
 	title: string;
 	description?: string;
+	activePage?: string;
 }
 
-const { title, description = "EchoAmazon - Your one-stop shop" } = Astro.props;
+const {
+	title,
+	description = "EchoAmazon - Your one-stop shop",
+	activePage,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -18,14 +26,71 @@ const { title, description = "EchoAmazon - Your one-stop shop" } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&display=swap"
-			rel="stylesheet"
-		/>
+		<Fonts />
+		<ViewTransitions />
+		<script is:inline>
+			function applyTheme() {
+				const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+					.matches
+					? "dark"
+					: "light";
+				const savedTheme = localStorage.getItem("theme");
+
+				if (savedTheme) {
+					document.documentElement.setAttribute("data-theme", savedTheme);
+				} else {
+					document.documentElement.setAttribute("data-theme", systemTheme);
+				}
+			}
+
+			// Apply on initial load
+			applyTheme();
+
+			// Re-apply after View Transition swap
+			document.addEventListener("astro:after-swap", applyTheme);
+		</script>
 	</head>
 	<body>
-		<slot />
+		<div class="app-layout">
+			<Sidebar activePage={activePage} />
+			<main
+				class="main-content"
+				transition:animate={fade({ duration: "0.3s" })}
+			>
+				<slot />
+			</main>
+		</div>
 	</body>
 </html>
+
+<style lang="sass">
+	@use '../styles/vars' as *
+
+	.app-layout
+		display: flex
+		min-height: 100vh
+		position: relative
+
+	.main-content
+		flex-grow: 1
+		width: 100%
+		padding: 1rem
+		padding-top: 4rem // Space for toggle button on mobile
+		transition: width 0.3s ease-in-out, margin-left 0.3s ease-in-out, padding 0.3s ease-in-out, transform 0.3s ease-in-out
+
+		@include respond-to($tablet)
+			padding: 2rem
+			padding-top: 2rem
+			width: calc(100% - 160px) // Sidebar (120px) + Gap (40px)
+			margin-left: 160px // Sidebar (120px) + Gap (40px)
+
+			// When sidebar is closed (body has .sidebar-toggled)
+			:global(body.sidebar-toggled) &
+				width: calc(100% - 40px) // Gap (40px)
+				margin-left: 40px // Gap (40px)
+
+		// Mobile: Shift content when sidebar is open
+		@media (max-width: 767px)
+			:global(body.sidebar-toggled) &
+				transform: translateX(100px) // Shift by sidebar width
+</style>
