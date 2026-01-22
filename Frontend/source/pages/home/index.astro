@@ -1,9 +1,9 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import Logo from "../../components/Logo.astro";
+import App from "@app/App.astro";
+import Logo from "@shared/ui/Logo/Logo.astro";
 ---
 
-<BaseLayout title="EchoAmazon - Home" activePage="home">
+<App title="EchoAmazon - Home" activePage="home">
 	<div class="container">
 		<div class="logo-container">
 			<Logo />
@@ -12,7 +12,7 @@ import Logo from "../../components/Logo.astro";
 		<p>Experience the future of shopping.</p>
 		<button id="theme-toggle">Toggle Theme</button>
 	</div>
-</BaseLayout>
+</App>
 
 <script>
 	function initThemeToggle() {
@@ -39,7 +39,7 @@ import Logo from "../../components/Logo.astro";
 </script>
 
 <style lang="sass">
-	@use '../../styles/vars' as *
+	@use '@shared/styles/vars' as *
 
 	.container
 		display: flex

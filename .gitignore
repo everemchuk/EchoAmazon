@@ -3,6 +3,7 @@ node_modules
 dist
 build
 .env
+.agent
 .env.*
 !.env.example
 Assets

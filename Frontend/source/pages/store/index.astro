@@ -1,18 +1,20 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import App from "@app/App.astro";
+
+// Main store landing page
 ---
 
-<BaseLayout title="EchoAmazon - Store" activePage="store">
+<App title="EchoAmazon - Store" activePage="store">
 	<div class="page-header">
 		<h1>Store</h1>
 	</div>
 	<div class="page-content">
 		<p>Explore our products.</p>
 	</div>
-</BaseLayout>
+</App>
 
 <style lang="sass">
-	@use '../../styles/vars' as *
+	@use '@shared/styles/vars' as *
 
 	.page-header
 		margin-bottom: 2rem

@@ -1,18 +1,20 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import App from "@app/App.astro";
+
+// Shopping cart page displaying selected items
 ---
 
-<BaseLayout title="EchoAmazon - Cart" activePage="cart">
+<App title="EchoAmazon - Cart" activePage="cart">
 	<div class="page-header">
 		<h1>Your Cart</h1>
 	</div>
 	<div class="page-content">
 		<p>Your shopping cart is empty.</p>
 	</div>
-</BaseLayout>
+</App>
 
 <style lang="sass">
-	@use '../../styles/vars' as *
+	@use '@shared/styles/vars' as *
 
 	.page-header
 		margin-bottom: 2rem

@@ -4,6 +4,29 @@
     ".astro/types.d.ts",
     "source/**/*"
   ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": [
+        "source/app/*"
+      ],
+      "@pages/*": [
+        "source/pages/*"
+      ],
+      "@widgets/*": [
+        "source/widgets/*"
+      ],
+      "@features/*": [
+        "source/features/*"
+      ],
+      "@entities/*": [
+        "source/entities/*"
+      ],
+      "@shared/*": [
+        "source/shared/*"
+      ]
+    }
+  },
   "exclude": [
     "build"
   ]

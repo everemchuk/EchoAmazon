@@ -1,18 +1,20 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import App from "@app/App.astro";
+
+// Sign-in page
 ---
 
-<BaseLayout title="EchoAmazon - Sign In" activePage="signin">
+<App title="EchoAmazon - Sign In" activePage="signin">
 	<div class="page-header">
 		<h1>Sign In</h1>
 	</div>
 	<div class="page-content">
 		<p>Please sign in to continue.</p>
 	</div>
-</BaseLayout>
+</App>
 
 <style lang="sass">
-	@use '../../styles/vars' as *
+	@use '@shared/styles/vars' as *
 
 	.page-header
 		margin-bottom: 2rem

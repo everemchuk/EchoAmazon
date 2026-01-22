@@ -14,7 +14,7 @@ export default defineConfig({
 	integrations: [
 		solid(),
 		icon({
-			iconDir: 'source/assets/icons'
+			iconDir: 'source/shared/assets/icons'
 		})
 	],
 	server: {
@@ -23,5 +23,17 @@ export default defineConfig({
 	},
 	devToolbar: {
 		enabled: false
+	},
+	vite: {
+		resolve: {
+			alias: {
+				"@app": "/source/app",
+				"@pages": "/source/pages",
+				"@widgets": "/source/widgets",
+				"@features": "/source/features",
+				"@entities": "/source/entities",
+				"@shared": "/source/shared"
+			}
+		}
 	}
 })

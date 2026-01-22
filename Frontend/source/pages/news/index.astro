@@ -1,18 +1,20 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import App from "@app/App.astro";
+
+// News section landing page
 ---
 
-<BaseLayout title="EchoAmazon - News" activePage="news">
+<App title="EchoAmazon - News" activePage="news">
 	<div class="page-header">
 		<h1>News</h1>
 	</div>
 	<div class="page-content">
 		<p>Latest updates and announcements.</p>
 	</div>
-</BaseLayout>
+</App>
 
 <style lang="sass">
-	@use '../../styles/vars' as *
+	@use '@shared/styles/vars' as *
 
 	.page-header
 		margin-bottom: 2rem

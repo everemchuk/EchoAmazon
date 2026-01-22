@@ -5,8 +5,11 @@ interface Props {
 }
 
 const { width = "100%", height = "auto" } = Astro.props;
+// Logo component that renders the Amazon logo as an SVG
+// Accepts width and height props for customization
 ---
 
+<!-- Main SVG Logo Component (Used in Sidebar & Preloader) -->
 <svg
 	version="1.2"
 	xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +41,7 @@ const { width = "100%", height = "auto" } = Astro.props;
 </svg>
 
 <style lang="sass">
-	@use '../styles/vars' as *
+	@use '@shared/styles/vars' as *
 
 	.s0
 		fill: $orange

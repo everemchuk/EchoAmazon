@@ -1,7 +1,11 @@
 ---
 import { AstroFont } from "astro-font";
+
+// Configures custom fonts for the application using astro-font
+// This handles loading, preloading, and CSS variable generation for fonts
 ---
 
+<!-- Font Loading Configuration using AstroFont -->
 <AstroFont
 	config={[
 		{
@@ -15,27 +19,27 @@ import { AstroFont } from "astro-font";
 				{
 					style: "normal",
 					weight: "400",
-					path: "./source/assets/fonts/Amazon Ember.ttf",
+					path: "./source/shared/assets/fonts/Amazon Ember.ttf",
 				},
 				{
 					style: "italic",
 					weight: "400",
-					path: "./source/assets/fonts/Amazon Ember Italic.ttf",
+					path: "./source/shared/assets/fonts/Amazon Ember Italic.ttf",
 				},
 				{
 					style: "normal",
 					weight: "500",
-					path: "./source/assets/fonts/Amazon Ember Medium.ttf",
+					path: "./source/shared/assets/fonts/Amazon Ember Medium.ttf",
 				},
 				{
 					style: "normal",
 					weight: "700",
-					path: "./source/assets/fonts/Amazon Ember Bold.ttf",
+					path: "./source/shared/assets/fonts/Amazon Ember Bold.ttf",
 				},
 				{
 					style: "normal",
 					weight: "300",
-					path: "./source/assets/fonts/Amazon Ember Light.ttf",
+					path: "./source/shared/assets/fonts/Amazon Ember Light.ttf",
 				},
 			],
 		},
@@ -50,12 +54,12 @@ import { AstroFont } from "astro-font";
 				{
 					style: "normal",
 					weight: "400",
-					path: "./source/assets/fonts/Amazon Ember Display.otf",
+					path: "./source/shared/assets/fonts/Amazon Ember Display.otf",
 				},
 				{
 					style: "normal",
 					weight: "700",
-					path: "./source/assets/fonts/Amazon Ember Display Bold.ttf",
+					path: "./source/shared/assets/fonts/Amazon Ember Display Heavy.otf",
 				},
 			],
 		},

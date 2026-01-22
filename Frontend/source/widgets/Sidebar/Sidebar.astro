@@ -1,6 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
-import Logo from "./Logo.astro";
+import Logo from "@shared/ui/Logo/Logo.astro";
 
 interface Props {
 	activePage?: string;
@@ -15,20 +15,26 @@ const navItems = [
 	{ name: "help", label: "Help Center", href: "/help" },
 	{ name: "cart", label: "Cart", href: "/cart" },
 ];
+// Sidebar component handling main navigation
+// Includes responsive behavior and mobile toggle functionality
 ---
 
 <aside class="sidebar" id="sidebar">
+	<!-- Logo Header -->
 	<div class="sidebar-header">
 		<a href="/home" class="logo-link">
 			<Logo width="100%" />
 		</a>
 	</div>
 
+	<!-- Main Navigation -->
 	<nav class="sidebar-nav">
 		<ul>
 			{
 				navItems.map((item) => {
+					// Determine if the current item is active based on the activePage prop
 					const isActive = activePage === item.name;
+					// Use active icon variant if selected
 					const iconName = isActive ? `${item.name}-active` : item.name;
 
 					return (
@@ -49,6 +55,7 @@ const navItems = [
 		</ul>
 	</nav>
 
+	<!-- Footer (Sign In) -->
 	<div class="sidebar-footer">
 		<a
 			href="/signin"
@@ -65,6 +72,7 @@ const navItems = [
 	</div>
 </aside>
 
+<!-- Mobile Toggle Button -->
 <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle Menu">
 	<svg
 		class="arrow-icon"
@@ -84,6 +92,7 @@ const navItems = [
 <div class="overlay" id="sidebar-overlay"></div>
 
 <script>
+	// Handles Sidebar Toggle on Mobile/Tablet
 	function initSidebar() {
 		console.log("Initializing Sidebar...");
 		const sidebar = document.getElementById("sidebar");
@@ -134,7 +143,7 @@ const navItems = [
 </script>
 
 <style lang="sass">
-	@use '../styles/vars' as *
+	@use '@shared/styles/vars' as *
 
 	.sidebar
 		position: fixed

@@ -1,7 +1,8 @@
 ---
-import "../styles/global.sass";
-import Fonts from "../components/Fonts.astro";
-import Sidebar from "../components/Sidebar.astro";
+import "@shared/styles/global.sass";
+import Fonts from "@shared/ui/Fonts/Fonts.astro";
+import Sidebar from "@widgets/Sidebar/Sidebar.astro";
+import Preloader from "@features/Preloader/Preloader.astro";
 import { ViewTransitions, fade } from "astro:transitions";
 
 interface Props {
@@ -15,6 +16,9 @@ const {
 	description = "EchoAmazon - Your one-stop shop",
 	activePage,
 } = Astro.props;
+
+// Base layout component wrapping all pages
+// Handles global styles, fonts, theme persistence, and view transitions
 ---
 
 <!doctype html>
@@ -26,9 +30,14 @@ const {
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+
+		<!-- Global Fonts & Transitions -->
 		<Fonts />
 		<ViewTransitions />
+
+		<!-- Theme Handling (Dark/Light Mode) -->
 		<script is:inline>
+			// Function to apply the correct theme based on local storage or system preference
 			function applyTheme() {
 				const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
 					.matches
@@ -36,6 +45,7 @@ const {
 					: "light";
 				const savedTheme = localStorage.getItem("theme");
 
+				// Apply saved theme or fallback to system preference
 				if (savedTheme) {
 					document.documentElement.setAttribute("data-theme", savedTheme);
 				} else {
@@ -46,11 +56,15 @@ const {
 			// Apply on initial load
 			applyTheme();
 
-			// Re-apply after View Transition swap
+			// Re-apply after View Transition swap to persist theme
 			document.addEventListener("astro:after-swap", applyTheme);
 		</script>
 	</head>
 	<body>
+		<!-- Global Preloader -->
+		<Preloader />
+
+		<!-- Main App Layout: Sidebar + Content Area -->
 		<div class="app-layout">
 			<Sidebar activePage={activePage} />
 			<main
@@ -64,7 +78,7 @@ const {
 </html>
 
 <style lang="sass">
-	@use '../styles/vars' as *
+	@use '@shared/styles/vars' as *
 
 	.app-layout
 		display: flex

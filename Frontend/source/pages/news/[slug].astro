@@ -1,13 +1,15 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import App from "@app/App.astro";
 
 export function getStaticPaths() {
 	return [{ params: { slug: "sample-article" } }];
 }
 
 const { slug } = Astro.params;
+
+// Dynamic page for individual news articles based on slug
 ---
 
-<BaseLayout title={`News - ${slug}`}>
+<App title={`News - ${slug}`}>
 	<h1>{slug}</h1>
-</BaseLayout>
+</App>
