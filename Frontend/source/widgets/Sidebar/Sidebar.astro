@@ -1,6 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import Logo from "@shared/ui/Logo/Logo.astro";
+import Tooltip from "@shared/ui/Tooltip/Tooltip.astro";
 
 interface Props {
 	activePage?: string;
@@ -9,11 +10,11 @@ interface Props {
 const { activePage = "home" } = Astro.props;
 
 const navItems = [
-	{ name: "home", label: "Home", href: "/home" },
-	{ name: "store", label: "Store", href: "/store" },
-	{ name: "news", label: "News", href: "/news" },
-	{ name: "help", label: "Help Center", href: "/help" },
-	{ name: "cart", label: "Cart", href: "/cart" },
+	{ name: "home", label: "Home", href: "/home", icon: "house-blank" },
+	{ name: "store", label: "Store", href: "/store", icon: "shopping-bag" },
+	{ name: "news", label: "News", href: "/news", icon: "newspaper" },
+	{ name: "help", label: "Help Center", href: "/help", icon: "life-ring" },
+	{ name: "cart", label: "Cart", href: "/cart", icon: "shopping-cart" },
 ];
 // Sidebar component handling main navigation
 // Includes responsive behavior and mobile toggle functionality
@@ -35,7 +36,8 @@ const navItems = [
 					// Determine if the current item is active based on the activePage prop
 					const isActive = activePage === item.name;
 					// Use active icon variant if selected
-					const iconName = isActive ? `${item.name}-active` : item.name;
+					const iconBase = item.icon || item.name;
+					const iconName = isActive ? `${iconBase}-active` : iconBase;
 
 					return (
 						<li>
@@ -47,6 +49,10 @@ const navItems = [
 								<div class="icon-container">
 									<Icon name={iconName} size={24} />
 								</div>
+								<Tooltip
+									text={item.label}
+									color={isActive ? "primary" : "regular"}
+								/>
 							</a>
 						</li>
 					);
@@ -68,6 +74,10 @@ const navItems = [
 					size={24}
 				/>
 			</div>
+			<Tooltip
+				text="Sign In"
+				color={activePage === "signin" ? "primary" : "regular"}
+			/>
 		</a>
 	</div>
 </aside>
@@ -94,13 +104,11 @@ const navItems = [
 <script>
 	// Handles Sidebar Toggle on Mobile/Tablet
 	function initSidebar() {
-		console.log("Initializing Sidebar...");
 		const sidebar = document.getElementById("sidebar");
 		const overlay = document.getElementById("sidebar-overlay");
 		const toggleBtn = document.getElementById("sidebar-toggle");
 
 		if (!sidebar || !toggleBtn) {
-			console.error("Sidebar elements not found");
 			return;
 		}
 
@@ -110,7 +118,6 @@ const navItems = [
 		const activeBtn = document.getElementById("sidebar-toggle");
 
 		function toggleSidebar() {
-			console.log("Toggling sidebar...");
 			document.body.classList.toggle("sidebar-toggled");
 			activeBtn?.classList.toggle("open");
 
@@ -120,7 +127,6 @@ const navItems = [
 		}
 
 		function closeSidebar() {
-			console.log("Closing sidebar...");
 			document.body.classList.remove("sidebar-toggled");
 			activeBtn?.classList.remove("open");
 			overlay?.classList.remove("active");
@@ -146,25 +152,27 @@ const navItems = [
 	@use '@shared/styles/vars' as *
 
 	.sidebar
+		border: 1px solid var(--border-color)
+		border-radius: 8px
 		position: fixed
-		top: 0
-		left: 0
-		height: 100vh
+		top: 1rem
+		left: 1rem
+		height: calc(100vh - 2rem)
 		width: 100px
 		background-color: var(--bg-color)
-		border-right: 1px solid var(--border-color)
+		// border-right: 1px solid var(--border-color) // Removed right border as we have full border now
 		display: flex
 		flex-direction: column
 		padding: 0 1rem 2rem 1rem
 		z-index: 1000
-		transform: translateX(-100%)
+		transform: translateX(calc(-100% - 2rem)) // Fully hide off-screen
 		transition: transform 0.3s ease-in-out
 		align-items: center
-		overflow-y: auto // Enable vertical scrolling
-		scrollbar-width: none // Hide scrollbar Firefox
+		overflow: visible // Allow tooltips to show outside
+		// scrollbar-width: none // Removed as overflow is visible
 
-		&::-webkit-scrollbar // Hide scrollbar Chrome/Safari/Edge
-			display: none
+		// &::-webkit-scrollbar
+		// 	display: none
 
 		// Mobile: Open when body has .sidebar-toggled
 		:global(body.sidebar-toggled) &
@@ -177,7 +185,7 @@ const navItems = [
 
 			// Tablet/Desktop: Closed when body has .sidebar-toggled
 			:global(body.sidebar-toggled) &
-				transform: translateX(-100%)
+				transform: translateX(calc(-100% - 2rem))
 
 	.sidebar-header
 		display: flex
@@ -213,14 +221,24 @@ const navItems = [
 		border-radius: 12px
 		color: var(--text-color)
 		transition: all 0.2s ease
+		position: relative // Ensure tooltip positioning relative to link
 
 		&:hover
 			background-color: var(--secondary-bg)
 			color: var(--primary-color)
 
+			// Target the tooltip component's class
+			:global(.tooltip)
+				opacity: 1
+				visibility: visible
+				transform: translateY(-50%) translateX(0)
+
 		&.active
 			color: var(--primary-color)
-			background-color: transparent // Removed background for active state
+			background-color: transparent
+
+		&:active
+			transform: scale(1.05)
 
 		.icon-container
 			width: 24px
@@ -272,17 +290,17 @@ const navItems = [
 		cursor: pointer
 		z-index: 1100
 		position: fixed
-		top: 1rem // Moved to top
-		left: 1rem // Default (Mobile Closed) with gap
+		top: 1.5rem // Align roughly with sidebar content
+		left: 1rem
 		color: var(--text-color)
 		transition: left 0.3s ease-in-out, transform 0.3s ease-in-out
 
 		// Mobile: When open, move with sidebar + gap
 		:global(body.sidebar-toggled) &
-			left: calc(100px + 1rem)
+			left: calc(100px + 2rem) // Width + Left Gap + Gap
 
 		@include respond-to($tablet)
-			left: calc(120px + 1rem) // Sidebar width + gap (default open)
+			left: calc(120px + 2rem) // Width + Left Gap + Gap
 
 			// Tablet/Desktop: When closed, move to edge + gap
 			:global(body.sidebar-toggled) &
@@ -290,7 +308,7 @@ const navItems = [
 
 		.arrow-icon
 			transition: transform 0.3s ease-in-out
-			transform: rotate(180deg) // Default (Mobile): Points Right (>)
+			transform: rotate(180deg)
 
 		// Mobile Open: Points Left (<)
 		:global(body.sidebar-toggled) & .arrow-icon
@@ -298,7 +316,7 @@ const navItems = [
 
 		@include respond-to($tablet)
 			.arrow-icon
-				transform: rotate(0deg) // Default (Tablet/Desktop): Points Left (<)
+				transform: rotate(0deg)
 
 			// Tablet/Desktop Closed: Points Right (>)
 			:global(body.sidebar-toggled) & .arrow-icon

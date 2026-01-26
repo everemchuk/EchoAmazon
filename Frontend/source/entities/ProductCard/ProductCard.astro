@@ -1,0 +1,458 @@
+---
+import { Icon } from "astro-icon/components";
+import Button from "@shared/ui/Button/Button.astro";
+import Tooltip from "@shared/ui/Tooltip/Tooltip.astro";
+
+interface Props {
+	id: string;
+	image: string;
+	title: string;
+	brand: string;
+	price: string;
+	rating: number;
+}
+
+const { id, image, title, brand, price, rating } = Astro.props;
+---
+
+<article class="product-card" data-product-id={id}>
+	<div class="image-container">
+		<div class="loader"></div>
+		<img src={image} alt={title} class="product-image loading" />
+	</div>
+	<div class="card-shape">
+		<div class="bg-shape"></div>
+	</div>
+	<div class="content">
+		<div class="info">
+			<h3 class="title">{title}</h3>
+			<p class="brand">{brand}</p>
+			<p class="price">{price}</p>
+		</div>
+
+		<div class="hover-details">
+			<div class="rating">
+				<div class="stars">
+					{
+						Array.from({ length: 5 }).map((_, i) => {
+							if (rating >= i + 1) {
+								return <Icon name="star" class="star" />;
+							} else if (rating >= i + 0.5) {
+								return <Icon name="star-half" class="star" />;
+							} else {
+								return <Icon name="star-outline" class="star star-empty" />;
+							}
+						})
+					}
+				</div>
+				<Tooltip text={`${rating}`} position="right" color="primary" />
+			</div>
+
+			<div class="sizes">
+				<span>XS</span>
+				<span>S</span>
+				<span>M</span>
+				<span>L</span>
+				<span>XL</span>
+			</div>
+
+			<Button
+				text="QUICK VIEW"
+				variant="smooth"
+				color="primary"
+				class="quick-view-btn js-quick-view"
+			/>
+		</div>
+	</div>
+</article>
+
+<style lang="sass">
+	@use "sass:color"
+	@use '@shared/styles/vars' as *
+
+	@keyframes float
+		0%
+			transform: translateY(20px)
+		50%
+			transform: translateY(10px)
+		100%
+			transform: translateY(20px)
+
+	@keyframes spin
+		0%
+			transform: translate(-50%, -50%) rotate(0deg)
+		100%
+			transform: translate(-50%, -50%) rotate(360deg)
+
+	.product-card
+		position: relative
+		width: 300px
+		height: 450px
+		border-radius: 20px
+		// overflow: hidden
+		clip-path: inset(-150px 0 0 0 round 20px)
+		background: transparent
+		transition: all 0.3s ease
+
+		// Only apply hover effects if NOT loading
+		&:not(.loading):hover
+
+			.product-image
+				transform: scale(0.8) translateY(-60px)
+
+			.image-container
+				animation: none
+				transform: translateY(0)
+
+			.card-shape
+				height: 75%
+
+			.content
+				height: 75%
+				transform: translateX(-50%)
+
+			.hover-details
+				opacity: 1
+				transform: translateY(0)
+
+			.info
+				margin-top: 1.5rem
+				margin-bottom: 0.5rem
+
+			.brand
+				margin-bottom: 0.5rem
+
+			.price
+				margin-bottom: 0.5rem
+
+			.sizes
+				//margin-bottom: 0.5rem
+
+	.image-container
+		position: relative
+		height: 60%
+		width: 100%
+		z-index: 2
+		animation: float 4s ease-in-out infinite
+		transition: transform 0.3s ease
+
+	.card-shape
+		position: absolute
+		bottom: 0
+		left: 50%
+		transform: translateX(-50%)
+		width: 85%
+		height: 40% // Initial height
+		z-index: 1
+		transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)
+
+		// Top slanted part
+		&::before
+			content: ""
+			position: absolute
+			top: -10px
+			left: 0
+			width: 100%
+			height: 80px
+			background-color: var(--bg-color)
+			transform: skewY(-10deg)
+			border-radius: 20px 20px 0 0
+			border: 1px solid var(--border-color)
+			border-bottom: none
+			z-index: -1
+
+		// Bottom flat part
+		&::after
+			content: ""
+			position: absolute
+			top: 30px
+			left: 0
+			width: 100%
+			bottom: 0
+			background-color: var(--bg-color)
+			border-radius: 0 0 20px 20px
+			border: 1px solid var(--border-color)
+			border-top: none
+			z-index: -1
+
+	.bg-shape
+		position: absolute
+		bottom: 80% // Position above the white content
+		left: 50%
+		// Skew to create the angled look while preserving border-radius
+		transform: translateX(-50%) skewY(-10deg)
+		width: 85%
+		height: 150px // Fixed height for the gray shape
+		background: linear-gradient(180deg, #9ca3af 0%, #6b7280 100%)
+		border-radius: 20px
+		z-index: -2
+
+	.product-image
+		width: 100%
+		height: 100%
+		object-fit: contain
+		padding: 20px
+		transition: transform 0.4s ease, opacity 0.5s ease
+		filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2))
+		opacity: 1
+
+		&.loading
+			opacity: 0
+
+	.loader
+		position: absolute
+		top: 50%
+		left: 50%
+		width: 48px // Slightly larger to match image feel
+		height: 48px
+		border-radius: 50%
+		background: conic-gradient(from 0deg, transparent 0%, var(--text-color) 100%)
+		// Create the ring shape
+		-webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #fff calc(100% - 4px))
+		mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #fff calc(100% - 4px))
+		animation: spin 1s linear infinite
+		z-index: 10
+		transform: translate(-50%, -50%) // Initial position (handled by animation)
+		transition: opacity 0.3s ease
+		opacity: 1
+		border: none // Remove old borders
+
+		&::after
+			content: ""
+			position: absolute
+			width: 4px // Match ring thickness
+			height: 4px
+			border-radius: 50%
+			background: var(--text-color)
+			top: 0
+			left: 50%
+			transform: translateX(-50%)
+			box-shadow: 0 0 2px var(--text-color) // Slight glow to blend
+
+		&.hidden
+			opacity: 0
+			visibility: hidden
+
+	.content
+		position: absolute
+		bottom: 0
+		left: 50%
+		transform: translateX(-50%)
+		width: 85%
+		height: 40% // Initial height
+		padding: 3rem 1.5rem 2rem // Increased bottom padding
+		display: flex
+		flex-direction: column
+		align-items: flex-start // Align content to left
+		text-align: left
+		transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)
+		z-index: 3
+
+	.info
+		margin-bottom: 1rem
+		transform: translateY(0px)
+		transition: transform 0.2s ease
+
+	.title
+		font-family: $font-family-heading
+		font-size: 1.5rem
+		font-weight: 700
+		color: var(--text-color)
+		margin-bottom: 0.25rem
+
+	.brand
+		font-size: 0.9rem
+		color: var(--secondary-text-color)
+		margin-bottom: 1.5rem
+		letter-spacing: 1px
+		text-transform: uppercase
+		transition: transform 0.3s ease
+
+	.price
+		font-size: 1.3rem
+		color: var(--text-color)
+		font-weight: 300
+
+	.hover-details
+		display: flex
+		flex-direction: column
+		align-items: flex-start // Align details to left
+		gap: 1rem
+		opacity: 0
+		transform: translateY(20px)
+		transition: all 0.4s ease 0.1s // Slight delay
+		width: 100%
+		flex: 1
+
+	.rating
+		position: relative
+		cursor: pointer
+		width: fit-content // Ensure it wraps the stars tightly
+
+		.stars
+			display: flex
+			align-items: center
+			gap: 0.25rem
+			color: var(--primary-color)
+
+		&:hover
+			:global(.tooltip)
+				opacity: 1
+				visibility: visible
+				transform: translateY(-50%) translateX(0)
+
+		.star
+			width: 16px
+			height: 16px
+
+			&.star-empty
+				width: 12px
+				height: 12px
+
+	.sizes
+		display: flex
+		gap: 0.25rem // Reduced gap further to ensure single row
+		font-size: 0.8rem
+		color: var(--text-color)
+		font-weight: 600
+		text-transform: uppercase
+		flex-wrap: nowrap // Force single row
+
+		span
+			cursor: pointer
+			transition: all 0.2s ease
+			width: 32px // Fixed width for circle
+			height: 32px // Fixed height for circle
+			display: flex
+			align-items: center
+			justify-content: center
+			border-radius: 50% // Make it a circle
+
+			&:hover
+				background-color: var(--secondary-bg)
+				color: var(--primary-color) // Keep text color on hover
+				transform: none
+
+			&.selected
+				color: var(--primary-color)
+				transform: scale(1.2)
+				font-weight: 700
+				background-color: transparent // Ensure no background on selected if not desired, or keep hover effect? User said "only when selected" for blue.
+				// Let's assume selected just changes text color and scale as per previous, maybe keep background if hovered?
+				// "do not make it blue only when selected" -> implies blue text is for selected.
+				// "on hover make sure there is background circle" -> hover gets bg.
+
+	.quick-view-btn
+		align-self: center // Center the button
+</style>
+
+<script>
+	import { colorExtractor } from "@shared/helpers/colorExtractor";
+
+	const updateColors = () => {
+		const cards = document.querySelectorAll(".product-card");
+		cards.forEach((card) => {
+			const img = card.querySelector(".product-image") as HTMLImageElement;
+			const bgShape = card.querySelector(".bg-shape") as HTMLElement;
+			colorExtractor(img, bgShape);
+
+			// Size selection logic
+			const sizes = card.querySelectorAll(".sizes span");
+			sizes.forEach((size) => {
+				size.addEventListener("click", (e) => {
+					e.preventDefault(); // Prevent bubbling if needed
+					// Remove selected class from all other sizes in this card
+					sizes.forEach((s) => s.classList.remove("selected"));
+					// Add selected class to clicked size
+					size.classList.add("selected");
+				});
+			});
+		});
+	};
+
+	const initLoaders = () => {
+		const cards = document.querySelectorAll(".product-card");
+		cards.forEach((card) => {
+			const img = card.querySelector(".product-image");
+			const loader = card.querySelector(".loader");
+
+			// Add loading state to card
+			card.classList.add("loading");
+
+			// Simulate loading
+			setTimeout(() => {
+				img?.classList.remove("loading");
+				loader?.classList.add("hidden");
+				// Remove loading state from card
+				card.classList.remove("loading");
+			}, 1000);
+		});
+	};
+
+	// Initial run
+	updateColors();
+	initLoaders();
+
+	// Re-run when theme changes
+	const observer = new MutationObserver((mutations) => {
+		mutations.forEach((mutation) => {
+			if (mutation.attributeName === "data-theme") {
+				updateColors();
+			}
+		});
+	});
+
+	observer.observe(document.documentElement, {
+		attributes: true,
+		attributeFilter: ["data-theme"],
+	});
+
+	const initQuickViewTriggers = () => {
+		const cards = document.querySelectorAll(".product-card");
+		cards.forEach((card) => {
+			const btn = card.querySelector(".js-quick-view");
+			if (!btn) return;
+
+			btn.addEventListener("click", (e) => {
+				e.preventDefault();
+				e.stopPropagation(); // Prevent card click if any
+
+				// Extract Data
+				const img = card.querySelector(".product-image") as HTMLImageElement;
+				const title = card.querySelector(".title")?.textContent;
+				const brand = card.querySelector(".brand")?.textContent;
+				const price = card.querySelector(".price")?.textContent;
+				const starsContainer = card.querySelector(".stars");
+				const productId = (card as HTMLElement).dataset.productId || "1";
+
+				const productData = {
+					image: img?.src,
+					title,
+					brand,
+					price,
+					starsHtml: starsContainer?.innerHTML,
+					id: productId,
+				};
+
+				// Dispatch Event
+				window.dispatchEvent(
+					new CustomEvent("quick-view:open", {
+						detail: productData,
+					}),
+				);
+			});
+		});
+	};
+
+	// Handle View Transitions
+	document.addEventListener("astro:after-swap", () => {
+		updateColors();
+		initLoaders();
+		initQuickViewTriggers();
+	});
+
+	// Initial run
+	updateColors();
+	initLoaders();
+	initQuickViewTriggers();
+</script>

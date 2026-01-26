@@ -1,0 +1,607 @@
+---
+import App from "@app/App.astro";
+import Button from "@shared/ui/Button/Button.astro";
+import { Icon } from "astro-icon/components";
+import pufferJacket from "@shared/assets/images/vecteezy_a-boy-s-puffer-jacket-with-a-hood_53110050.png";
+import varsityJacket from "@shared/assets/images/vecteezy_generated-ai-yellow-varsity-jacket-isolated-on-transparent_48767912.png";
+import trackJacket from "@shared/assets/images/vecteezy_sporty-black-track-jacket-with-zipper_43023976.png";
+
+// Product data store
+const productsData: Record<
+	string,
+	{
+		id: string;
+		title: string;
+		brand: string;
+		category: string;
+		price: string;
+		rating: number;
+		reviews: number;
+		image: string;
+		description: string;
+		sizes: string[];
+		colorVariants: { name: string; image: string }[];
+	}
+> = {
+	"1": {
+		id: "1",
+		title: "Cashmere Jacket",
+		brand: "Brioni",
+		category: "Jackets",
+		price: "$5,657",
+		rating: 4,
+		reviews: 28,
+		image: pufferJacket.src,
+		description:
+			"She suspicion dejection saw instantly. Well deny may real one told yet saw hard dear. Bed chief house rapid right the. Set noisy one state tears which. No girl oh part must fact high my he. Simplicity in excellence melancholy as remarkably discovered.",
+		sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+		colorVariants: [
+			{ name: "Charcoal", image: pufferJacket.src },
+			{ name: "Navy", image: trackJacket.src },
+		],
+	},
+	"2": {
+		id: "2",
+		title: "Varsity Jacket",
+		brand: "Nike",
+		category: "Jackets",
+		price: "$120",
+		rating: 3.5,
+		reviews: 256,
+		image: varsityJacket.src,
+		description:
+			"A modern take on the classic varsity jacket. This iconic piece combines streetwear aesthetics with athletic heritage, featuring premium materials and contemporary styling.",
+		sizes: ["S", "M", "L", "XL", "XXL"],
+		colorVariants: [
+			{ name: "Yellow", image: varsityJacket.src },
+			{ name: "Black", image: trackJacket.src },
+		],
+	},
+	"3": {
+		id: "3",
+		title: "Track Jacket",
+		brand: "Adidas",
+		category: "Sportswear",
+		price: "$80",
+		rating: 2.5,
+		reviews: 342,
+		image: trackJacket.src,
+		description:
+			"The iconic track jacket reimagined for modern athletes. Features a slim fit design with classic three-stripe detailing, perfect for training or casual wear.",
+		sizes: ["XS", "S", "M", "L", "XL"],
+		colorVariants: [
+			{ name: "Black", image: trackJacket.src },
+			{ name: "Navy", image: pufferJacket.src },
+		],
+	},
+};
+
+export function getStaticPaths() {
+	return [
+		{ params: { id: "1" } },
+		{ params: { id: "2" } },
+		{ params: { id: "3" } },
+	];
+}
+
+const { id } = Astro.params;
+const product = productsData[id] || productsData["1"];
+---
+
+<App
+	title={`${product.title} by ${product.brand} - EchoAmazon`}
+	activePage="store"
+>
+	<div class="product-page">
+		<div class="product-container">
+			<!-- Left: Image Gallery Section -->
+			<div class="gallery-section">
+				<!-- Back Button -->
+				<a href="/store" class="back-button">
+					<Icon name="arrow-left" size={20} />
+				</a>
+
+				<!-- Main Image with Hotspots -->
+				<div class="main-image-wrapper">
+					<img
+						src={product.image}
+						alt={product.title}
+						class="main-image"
+						id="main-product-image"
+					/>
+				</div>
+
+				<!-- Thumbnail Strip -->
+				<div class="thumbnail-strip">
+					<div class="thumbnail active">
+						<img src={product.image} alt="View 1" />
+					</div>
+					<div class="thumbnail">
+						<img src={product.image} alt="View 2" />
+					</div>
+					<div class="thumbnail">
+						<img src={product.image} alt="View 3" />
+					</div>
+				</div>
+			</div>
+
+			<!-- Right: Product Details Section -->
+			<div class="details-section">
+				<!-- Decorative Hexagon Background -->
+				<div class="hexagon-bg">
+					<svg viewBox="0 0 200 200" class="hexagon hex-1">
+						<polygon points="100,10 180,55 180,145 100,190 20,145 20,55"
+						></polygon>
+					</svg>
+					<svg viewBox="0 0 200 200" class="hexagon hex-2">
+						<polygon points="100,10 180,55 180,145 100,190 20,145 20,55"
+						></polygon>
+					</svg>
+					<svg viewBox="0 0 200 200" class="hexagon hex-3">
+						<polygon points="100,10 180,55 180,145 100,190 20,145 20,55"
+						></polygon>
+					</svg>
+				</div>
+
+				<!-- Product Header -->
+				<div class="product-header">
+					<h1 class="title">{product.title}</h1>
+					<p class="brand">{product.brand}</p>
+
+					<div class="rating-row">
+						<div class="stars">
+							{
+								Array.from({ length: 5 }).map((_, i) => {
+									if (product.rating >= i + 1) {
+										return <Icon name="star" class="star filled" />;
+									} else if (product.rating >= i + 0.5) {
+										return <Icon name="star-half" class="star filled" />;
+									} else {
+										return <Icon name="star-outline" class="star empty" />;
+									}
+								})
+							}
+						</div>
+						<span class="reviews">{product.reviews} Reviews</span>
+					</div>
+				</div>
+
+				<!-- Color Variants -->
+				<div class="color-variants">
+					{
+						product.colorVariants.map((variant, index) => (
+							<button
+								class={`color-variant ${index === 0 ? "active" : ""}`}
+								title={variant.name}
+							>
+								<img src={variant.image} alt={variant.name} />
+							</button>
+						))
+					}
+				</div>
+
+				<!-- Description -->
+				<p class="description">{product.description}</p>
+
+				<!-- Size Selector -->
+				<div class="size-section">
+					<div class="size-options">
+						{
+							product.sizes.map((size, index) => (
+								<button class={`size-option ${index === 1 ? "selected" : ""}`}>
+									{size}
+								</button>
+							))
+						}
+					</div>
+				</div>
+
+				<!-- Price and Actions -->
+				<div class="purchase-row">
+					<div class="price-block">
+						<span class="price-label">Best Price</span>
+						<span class="price">{product.price}</span>
+					</div>
+
+					<div class="action-buttons">
+						<Button
+							text="Add To Cart"
+							color="primary"
+							variant="smooth"
+							class="add-cart-btn"
+						/>
+						<button class="bookmark-btn" aria-label="Save to wishlist">
+							<Icon name="bookmark" size={20} />
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</App>
+
+<style lang="sass">
+	@use '@shared/styles/vars' as *
+
+	.product-page
+		padding: 1.5rem
+		min-height: calc(100vh - 4rem)
+		display: flex
+		align-items: center
+
+		@include respond-to($tablet)
+			padding: 2rem
+
+	.product-container
+		display: flex
+		flex-direction: column
+		gap: 2rem
+		width: 100%
+		max-width: 1200px
+		margin: 0 auto
+
+		@include respond-to($tablet)
+			flex-direction: row
+			gap: 4rem
+			align-items: stretch
+
+	// === Gallery Section ===
+	.gallery-section
+		flex: 1
+		position: relative
+		display: flex
+		flex-direction: column
+		gap: 1.5rem
+
+	.back-button
+		position: absolute
+		top: 1rem
+		left: 1rem
+		width: 44px
+		height: 44px
+		border-radius: 50%
+		background-color: var(--bg-color)
+		border: 1px solid var(--border-color)
+		display: flex
+		align-items: center
+		justify-content: center
+		color: var(--text-color)
+		z-index: 10
+		transition: all 0.2s ease
+		box-shadow: 0 2px 8px rgba(0,0,0,0.08)
+
+		&:hover
+			background-color: var(--secondary-bg)
+			color: var(--primary-color)
+			transform: scale(1.05)
+
+	.main-image-wrapper
+		position: relative
+		background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%)
+		border-radius: 24px
+		padding: 3rem 2rem
+		display: flex
+		align-items: center
+		justify-content: center
+		min-height: 380px
+
+		[data-theme="dark"] &
+		background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%)
+
+		@include respond-to($tablet)
+			min-height: 450px
+			padding: 4rem 3rem
+
+	.main-image
+		max-width: 100%
+		max-height: 350px
+		object-fit: contain
+		filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1))
+		transition: transform 0.4s ease
+
+		@include respond-to($tablet)
+			max-height: 400px
+
+	// === Thumbnails ===
+	.thumbnail-strip
+		display: flex
+		gap: 1rem
+		justify-content: flex-start
+		padding-left: 0.5rem
+
+	.thumbnail
+		width: 70px
+		height: 80px
+		border-radius: 12px
+		overflow: hidden
+		cursor: pointer
+		border: 2px solid transparent
+		background-color: var(--secondary-bg)
+		transition: all 0.2s ease
+		display: flex
+		align-items: center
+		justify-content: center
+		padding: 8px
+
+		&:hover,
+		&.active
+			border-color: var(--primary-color)
+			box-shadow: 0 4px 12px rgba(0,0,0,0.1)
+
+		img
+			max-width: 100%
+			max-height: 100%
+			object-fit: contain
+
+	// === Details Section ===
+	.details-section
+		flex: 1
+		position: relative
+		display: flex
+		flex-direction: column
+		gap: 1.25rem
+		padding: 1rem 0
+
+		@include respond-to($tablet)
+			padding: 1rem 2rem
+
+	// === Hexagon Background ===
+	.hexagon-bg
+		position: absolute
+		top: 0
+		right: 0
+		width: 200px
+		height: 200px
+		pointer-events: none
+		overflow: hidden
+		opacity: 0.08
+
+		@include respond-to($tablet)
+			width: 280px
+			height: 280px
+
+	.hexagon
+		position: absolute
+		fill: none
+		stroke: var(--text-color)
+		stroke-width: 1
+
+		&.hex-1
+			width: 100px
+			height: 100px
+			top: 20px
+			right: 40px
+
+		&.hex-2
+			width: 80px
+			height: 80px
+			top: 80px
+			right: 100px
+
+		&.hex-3
+			width: 60px
+			height: 60px
+			top: 10px
+			right: 120px
+
+	// === Product Header ===
+	.product-header
+		.title
+			font-family: $font-family-heading
+			font-size: 2rem
+			font-weight: 700
+			color: var(--text-color)
+			line-height: 1.2
+			margin-bottom: 0.5rem
+
+			@include respond-to($tablet)
+				font-size: 2.5rem
+
+		.brand
+			font-size: 0.9rem
+			color: var(--secondary-text-color)
+			text-transform: uppercase
+			letter-spacing: 1.5px
+			margin-bottom: 1rem
+
+	.rating-row
+		display: flex
+		align-items: center
+		gap: 0.75rem
+
+		.stars
+			display: flex
+			gap: 0.2rem
+
+		.star
+			width: 16px
+			height: 16px
+			color: var(--primary-color)
+
+			&.empty
+				width: 14px
+				height: 14px
+				opacity: 0.3
+
+		.reviews
+			color: var(--secondary-text-color)
+			font-size: 0.85rem
+
+	// === Color Variants ===
+	.color-variants
+		display: flex
+		gap: 0.75rem
+
+	.color-variant
+		width: 50px
+		height: 55px
+		border-radius: 10px
+		border: 2px solid transparent
+		background-color: var(--secondary-bg)
+		cursor: pointer
+		padding: 6px
+		transition: all 0.2s ease
+		display: flex
+		align-items: center
+		justify-content: center
+
+		&:hover,
+		&.active
+			border-color: var(--primary-color)
+
+		img
+			max-width: 100%
+			max-height: 100%
+			object-fit: contain
+
+	// === Description ===
+	.description
+		font-size: 0.9rem
+		line-height: 1.7
+		color: var(--secondary-text-color)
+		max-width: 500px
+
+	// === Size Section ===
+	.size-section
+		margin-top: 0.5rem
+
+	.size-options
+		display: flex
+		flex-wrap: wrap
+		gap: 0.5rem
+
+	.size-option
+		min-width: 44px
+		height: 40px
+		padding: 0 1rem
+		border-radius: 6px
+		border: 1px solid var(--border-color)
+		background: transparent
+		color: var(--text-color)
+		font-weight: 500
+		font-size: 0.9rem
+		cursor: pointer
+		transition: all 0.2s ease
+
+		&:hover
+			border-color: var(--primary-color)
+			color: var(--primary-color)
+
+		&.selected
+			background-color: var(--primary-color)
+			border-color: var(--primary-color)
+			color: #fff
+
+	// === Purchase Row ===
+	.purchase-row
+		display: flex
+		flex-wrap: wrap
+		align-items: flex-end
+		gap: 1.5rem
+		margin-top: 1rem
+		padding-top: 1rem
+		border-top: 1px solid var(--border-color)
+
+	.price-block
+		display: flex
+		flex-direction: column
+		gap: 0.25rem
+
+		.price-label
+			font-size: 0.8rem
+			color: var(--secondary-text-color)
+
+		.price
+			font-size: 1.75rem
+			font-weight: 700
+			color: var(--text-color)
+
+	.action-buttons
+		display: flex
+		gap: 0.75rem
+		align-items: center
+
+		:global(.add-cart-btn)
+			min-width: 160px
+
+	.bookmark-btn
+		width: 48px
+		height: 48px
+		border-radius: 8px
+		border: 1px solid var(--border-color)
+		background: transparent
+		color: var(--secondary-text-color)
+		cursor: pointer
+		transition: all 0.2s ease
+		display: flex
+		align-items: center
+		justify-content: center
+
+		&:hover
+			border-color: var(--primary-color)
+			color: var(--primary-color)
+			background-color: var(--secondary-bg)
+</style>
+
+<script>
+	// Size Selection Logic
+	const initSizeSelector = () => {
+		const sizeOptions = document.querySelectorAll(".size-option");
+		sizeOptions.forEach((option) => {
+			option.addEventListener("click", () => {
+				sizeOptions.forEach((o) => o.classList.remove("selected"));
+				option.classList.add("selected");
+			});
+		});
+	};
+
+	// Color Variant Selection
+	const initColorVariants = () => {
+		const colorOptions = document.querySelectorAll(".color-variant");
+		const mainImage = document.getElementById(
+			"main-product-image",
+		) as HTMLImageElement;
+
+		colorOptions.forEach((option) => {
+			option.addEventListener("click", () => {
+				colorOptions.forEach((o) => o.classList.remove("active"));
+				option.classList.add("active");
+
+				const variantImg = option.querySelector("img") as HTMLImageElement;
+				if (variantImg && mainImage) {
+					mainImage.src = variantImg.src;
+				}
+			});
+		});
+	};
+
+	// Thumbnail Selection
+	const initThumbnails = () => {
+		const thumbnails = document.querySelectorAll(".thumbnail");
+		const mainImage = document.getElementById(
+			"main-product-image",
+		) as HTMLImageElement;
+
+		thumbnails.forEach((thumb) => {
+			thumb.addEventListener("click", () => {
+				thumbnails.forEach((t) => t.classList.remove("active"));
+				thumb.classList.add("active");
+
+				const thumbImg = thumb.querySelector("img") as HTMLImageElement;
+				if (thumbImg && mainImage) {
+					mainImage.src = thumbImg.src;
+				}
+			});
+		});
+	};
+
+	// Initialize
+	const initProductPage = () => {
+		initSizeSelector();
+		initColorVariants();
+		initThumbnails();
+	};
+
+	initProductPage();
+	document.addEventListener("astro:page-load", initProductPage);
+</script>

@@ -1,5 +1,36 @@
 ---
 import App from "@app/App.astro";
+import ProductCard from "@entities/ProductCard/ProductCard.astro";
+import pufferJacket from "@shared/assets/images/vecteezy_a-boy-s-puffer-jacket-with-a-hood_53110050.png";
+import varsityJacket from "@shared/assets/images/vecteezy_generated-ai-yellow-varsity-jacket-isolated-on-transparent_48767912.png";
+import trackJacket from "@shared/assets/images/vecteezy_sporty-black-track-jacket-with-zipper_43023976.png";
+
+const products = [
+	{
+		id: "1",
+		title: "Cashmere Jacket",
+		brand: "Brioni",
+		price: "$5657",
+		rating: 4.5,
+		image: pufferJacket.src,
+	},
+	{
+		id: "2",
+		title: "Varsity Jacket",
+		brand: "Nike",
+		price: "$120",
+		rating: 3.5,
+		image: varsityJacket.src,
+	},
+	{
+		id: "3",
+		title: "Track Jacket",
+		brand: "Adidas",
+		price: "$80",
+		rating: 2.5,
+		image: trackJacket.src,
+	},
+];
 
 // Main store landing page
 ---
@@ -9,7 +40,20 @@ import App from "@app/App.astro";
 		<h1>Store</h1>
 	</div>
 	<div class="page-content">
-		<p>Explore our products.</p>
+		<div class="products-grid">
+			{
+				products.map((product) => (
+					<ProductCard
+						id={product.id}
+						title={product.title}
+						brand={product.brand}
+						price={product.price}
+						image={product.image}
+						rating={product.rating}
+					/>
+				))
+			}
+		</div>
 	</div>
 </App>
 
@@ -18,6 +62,7 @@ import App from "@app/App.astro";
 
 	.page-header
 		margin-bottom: 2rem
+		text-align: center
 
 		h1
 			font-family: $font-family-heading
@@ -25,5 +70,21 @@ import App from "@app/App.astro";
 			color: var(--text-color)
 
 	.page-content
-		color: var(--text-color)
+		display: flex
+		justify-content: center
+		padding-bottom: 4rem
+
+	.products-grid
+		display: grid
+		grid-template-columns: repeat(1, 1fr)
+		gap: 2rem
+		width: 100%
+		max-width: 1200px
+		justify-items: center
+
+		@include respond-to($tablet)
+			grid-template-columns: repeat(2, 1fr)
+
+		@include respond-to($desktop)
+			grid-template-columns: repeat(3, 1fr)
 </style>

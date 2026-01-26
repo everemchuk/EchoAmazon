@@ -1,6 +1,7 @@
 ---
 import App from "@app/App.astro";
 import Logo from "@shared/ui/Logo/Logo.astro";
+import Button from "@shared/ui/Button/Button.astro";
 ---
 
 <App title="EchoAmazon - Home" activePage="home">
@@ -10,7 +11,7 @@ import Logo from "@shared/ui/Logo/Logo.astro";
 		</div>
 		<h1>Welcome to EchoAmazon</h1>
 		<p>Experience the future of shopping.</p>
-		<button id="theme-toggle">Toggle Theme</button>
+		<Button id="theme-toggle" class="theme-toggle-btn" text="Toggle Theme" variant="sharp" color="primary" />
 	</div>
 </App>
 
@@ -77,23 +78,9 @@ import Logo from "@shared/ui/Logo/Logo.astro";
 		@include respond-to($tablet)
 			font-size: 1.25rem
 
-	button
+	.theme-toggle-btn
 		margin-top: 1.5rem
-		padding: 0.5rem 1rem
-		font-size: 0.875rem
-		border: 2px solid var(--primary-color)
-		border-radius: 4px
-		color: var(--text-color)
-		transition: all 0.2s
-		background: none
-		cursor: pointer
 
 		@include respond-to($tablet)
 			margin-top: 2rem
-			padding: 0.75rem 1.5rem
-			font-size: 1rem
-
-		&:hover
-			background-color: var(--primary-color)
-			color: var(--bg-color)
 </style>

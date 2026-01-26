@@ -2,6 +2,7 @@
 import "@shared/styles/global.sass";
 import Fonts from "@shared/ui/Fonts/Fonts.astro";
 import Sidebar from "@widgets/Sidebar/Sidebar.astro";
+import ProductQuickView from "@widgets/ProductQuickView/ProductQuickView.astro";
 import Preloader from "@features/Preloader/Preloader.astro";
 import { ViewTransitions, fade } from "astro:transitions";
 
@@ -62,7 +63,7 @@ const {
 	</head>
 	<body>
 		<!-- Global Preloader -->
-		<Preloader />
+		<!-- <Preloader /> -->
 
 		<!-- Main App Layout: Sidebar + Content Area -->
 		<div class="app-layout">
@@ -73,6 +74,7 @@ const {
 			>
 				<slot />
 			</main>
+			<ProductQuickView />
 		</div>
 	</body>
 </html>
