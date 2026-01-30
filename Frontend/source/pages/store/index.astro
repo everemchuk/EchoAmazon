@@ -1,6 +1,6 @@
 ---
 import App from "@app/App.astro";
-import ProductCard from "@entities/ProductCard/ProductCard.astro";
+import ProductCard from "@entities/ProductCard/ProductCard.tsx";
 import pufferJacket from "@shared/assets/images/vecteezy_a-boy-s-puffer-jacket-with-a-hood_53110050.png";
 import varsityJacket from "@shared/assets/images/vecteezy_generated-ai-yellow-varsity-jacket-isolated-on-transparent_48767912.png";
 import trackJacket from "@shared/assets/images/vecteezy_sporty-black-track-jacket-with-zipper_43023976.png";
@@ -35,7 +35,7 @@ const products = [
 // Main store landing page
 ---
 
-<App title="EchoAmazon - Store" activePage="store">
+<App title="Store" activePage="store">
 	<div class="page-header">
 		<h1>Store</h1>
 	</div>
@@ -44,6 +44,7 @@ const products = [
 			{
 				products.map((product) => (
 					<ProductCard
+						client:load
 						id={product.id}
 						title={product.title}
 						brand={product.brand}

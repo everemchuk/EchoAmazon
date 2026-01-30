@@ -1,0 +1,76 @@
+@use '@shared/styles/vars' as *
+
+.icon-btn
+	display: flex
+	align-items: center
+	justify-content: center
+	cursor: pointer
+	transition: all 0.2s ease
+	border: 1px solid transparent
+	background: transparent
+	padding: 0
+
+	&:active
+		transform: scale(1.05)
+
+// Sizes
+.btn-size-small
+	width: 32px
+	height: 32px
+
+.btn-size-medium
+	width: 48px
+	height: 48px
+
+.btn-size-large
+	width: 56px
+	height: 56px
+
+// Shapes
+.btn-shape-circle
+	border-radius: 50%
+
+.btn-shape-rounded
+	border-radius: 0.5rem
+
+.btn-shape-square
+	border-radius: 0
+
+// Variants & Colors
+
+// Outline Primary
+.btn-outline.btn-color-primary
+	border-color: var(--primary-color)
+	color: var(--primary-color)
+	background: transparent
+
+	&:hover
+		background-color: var(--primary-color)
+		color: var(--text-color)
+
+// Outline Regular (like wishlist)
+.btn-outline.btn-color-regular
+	border-color: var(--border-color)
+	color: var(--secondary-text-color)
+	background: transparent
+
+	&:hover
+		border-color: var(--primary-color)
+		color: var(--text-color)
+		background-color: var(--secondary-bg)
+
+// Solid Primary
+.btn-solid.btn-color-primary
+	background-color: var(--primary-color)
+	color: var(--bg-color)
+
+	&:hover
+		opacity: 0.9
+
+// Ghost
+.btn-ghost
+	background: transparent
+	color: var(--text-color)
+
+	&:hover
+		background-color: var(--secondary-bg)

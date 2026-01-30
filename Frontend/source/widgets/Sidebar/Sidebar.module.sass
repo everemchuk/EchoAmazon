@@ -1,0 +1,115 @@
+@use '@shared/styles/vars' as *
+
+.sidebar
+	border: 1px solid var(--border-color)
+	border-radius: 8px
+	position: fixed
+	top: 1rem
+	left: 1rem
+	height: calc(100vh - 2rem)
+	width: 100px
+	background-color: var(--bg-color)
+	display: flex
+	flex-direction: column
+	padding: 0 1rem 2rem 1rem
+	z-index: 1000
+	transform: translateX(0)
+	transition: transform 0.3s ease-in-out
+	align-items: center
+	overflow: visible
+
+	@include respond-to($tablet)
+		width: 120px
+		position: fixed
+
+.sidebar-header
+	display: flex
+	justify-content: center
+	align-items: center
+	margin-bottom: 4rem
+	padding-top: 1rem
+	width: 100%
+
+	.logo-link
+		width: 50px
+		display: flex
+		justify-content: center
+
+.sidebar-nav
+	flex-grow: 1
+	width: 100%
+	display: flex
+	flex-direction: column
+	justify-content: center
+
+	ul
+		display: flex
+		flex-direction: column
+		gap: 1.5rem
+		align-items: center
+
+.nav-link
+	display: flex
+	align-items: center
+	justify-content: center
+	padding: 0.75rem
+	border-radius: 12px
+	color: var(--text-color)
+	transition: all 0.2s ease
+	position: relative
+
+	&:hover
+		color: var(--primary-color)
+
+		// Target the tooltip component's class
+		:global(.tooltip)
+			opacity: 1
+			visibility: visible
+			transform: translateY(-50%) translateX(0)
+
+	&.active
+		color: var(--primary-color)
+		background-color: transparent
+
+	&:active
+		transform: scale(1.05)
+
+	.icon-container
+		width: 24px
+		height: 24px
+		display: flex
+		align-items: center
+		justify-content: center
+		color: currentColor
+		position: relative
+
+	.cart-counter
+		position: absolute
+		top: -5px
+		right: -5px
+		background-color: var(--bg-color)
+		color: var(--primary-color)
+		font-size: 0.6rem
+		font-weight: 700
+		min-width: 16px
+		height: 16px
+		border-radius: 50%
+		display: flex
+		align-items: center
+		justify-content: center
+		padding: 2px
+		transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+
+.bump
+	transform: scale(1.5)
+
+.sidebar-footer
+	margin-top: auto
+	padding-top: 4rem
+	border-top: none
+	width: 100%
+	display: flex
+	flex-direction: column
+	gap: 1.5rem
+	align-items: center
+	justify-content: center

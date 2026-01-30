@@ -1,0 +1,78 @@
+@use '@shared/styles/vars' as *
+
+@keyframes loader-spin
+	0%
+		transform: rotate(0deg)
+	100%
+		transform: rotate(360deg)
+
+@keyframes loader-spin-centered
+	0%
+		transform: translate(-50%, -50%) rotate(0deg)
+	100%
+		transform: translate(-50%, -50%) rotate(360deg)
+
+.loader
+	border-radius: 50%
+	-webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #fff calc(100% - 4px))
+	mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #fff calc(100% - 4px))
+	animation: loader-spin 1s linear infinite
+	transition: opacity 0.3s ease, visibility 0.3s ease
+	opacity: 1
+	border: none
+
+	&::after
+		content: ""
+		position: absolute
+		width: 4px
+		height: 4px
+		border-radius: 50%
+		top: 0
+		left: 50%
+		transform: translateX(-50%)
+
+.loader-small
+	width: 24px
+	height: 24px
+
+	&::after
+		width: 3px
+		height: 3px
+
+.loader-medium
+	width: 48px
+	height: 48px
+
+.loader-large
+	width: 72px
+	height: 72px
+
+	&::after
+		width: 5px
+		height: 5px
+
+.loader-color-primary
+	background: conic-gradient(from 0deg, transparent 0%, var(--primary-color) 100%)
+
+	&::after
+		background: var(--primary-color)
+		box-shadow: 0 0 2px var(--primary-color)
+
+.loader-color-text
+	background: conic-gradient(from 0deg, transparent 0%, var(--text-color) 100%)
+
+	&::after
+		background: var(--text-color)
+		box-shadow: 0 0 2px var(--text-color)
+
+.loader-centered
+	position: absolute
+	top: 50%
+	left: 50%
+	transform: translate(-50%, -50%)
+	animation: loader-spin-centered 1s linear infinite
+	z-index: 10
+
+.loader-hidden
+	opacity: 0
+	visibility: hidden

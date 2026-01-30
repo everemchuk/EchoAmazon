@@ -1,0 +1,58 @@
+@use '@shared/styles/vars' as *
+
+.slider-section
+	width: 100%
+	padding: 0 0
+	position: relative
+
+.slider-header
+	display: flex
+	justify-content: flex-end
+	align-items: center
+	margin-bottom: 1.5rem
+	padding: 0 1rem
+
+	@include respond-to($tablet)
+		padding: 0 2rem
+
+.slider-title
+	font-family: $font-family-heading
+	font-size: 1.5rem
+	color: var(--text-color)
+	margin: 0
+
+	@include respond-to($tablet)
+		font-size: 2rem
+
+.slider-controls
+	display: flex
+	gap: 1rem
+
+.disabled
+	opacity: 0.5
+	cursor: default
+	pointer-events: none
+
+.slider-container
+	width: 100%
+	overflow-x: auto
+	overflow-y: hidden
+	scroll-behavior: smooth
+	-webkit-overflow-scrolling: touch
+	scrollbar-width: none /* Firefox */
+	padding: 1rem
+
+	&::-webkit-scrollbar
+		display: none /* Chrome, Safari, Opera */
+
+		scroll-snap-type: x mandatory
+
+.slider-track
+	display: flex
+	gap: 1.5rem
+	width: max-content
+
+	/* Ensure items don't shrink */
+	> *
+		flex: 0 0 auto
+		scroll-snap-align: start

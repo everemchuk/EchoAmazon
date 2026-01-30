@@ -11,19 +11,23 @@ export default defineConfig({
 	adapter: node({
 		mode: 'standalone'
 	}),
+
 	integrations: [
 		solid(),
 		icon({
 			iconDir: 'source/shared/assets/icons'
 		})
 	],
+
 	server: {
 		host: true,
 		port: 3000
 	},
+
 	devToolbar: {
 		enabled: false
 	},
+	
 	vite: {
 		resolve: {
 			alias: {

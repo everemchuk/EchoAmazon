@@ -1,0 +1,335 @@
+@use '@shared/styles/vars' as *
+
+.product-view-overlay
+	position: fixed
+	top: 0
+	left: 0
+	width: 100%
+	height: 100%
+	z-index: 2000
+	pointer-events: none
+	opacity: 0
+	transition: opacity 0.3s ease
+
+	// Toggle positioning
+	.pv-close-toggle
+		position: fixed
+		top: 2rem
+		// Panel is 70% wide with 1rem right margin, so left edge is at (70% + 1rem) from right
+		// Add 40px (toggle width) + 1rem gap = toggle right edge position
+		right: calc(70% + 1rem + 40px + 1rem)
+		z-index: 2001
+		opacity: 0
+		pointer-events: none
+		transform: translateX(calc(100% + 2rem))
+		transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)
+
+		@media (max-width: 1024px)
+			right: calc(85% + 1rem + 40px + 1rem)
+
+		@media (max-width: 768px)
+			right: auto
+			left: 1rem
+			top: 1.5rem
+			transform: translateX(-100%)
+
+	&.active
+		pointer-events: auto
+		opacity: 1
+
+		.product-view-panel
+			transform: translateX(0)
+
+		// Show toggle when active
+		.pv-close-toggle
+			opacity: 1
+			pointer-events: auto
+			transform: translateX(0)
+
+.product-view-backdrop
+	position: absolute
+	top: 0
+	left: 0
+	width: 100%
+	height: 100%
+	background-color: rgba(0, 0, 0, 0.5)
+	backdrop-filter: blur(4px)
+	cursor: pointer
+
+.product-view-panel
+	position: absolute
+	top: 1rem
+	right: 1rem
+	bottom: 1rem
+	width: 100%
+	max-width: 70%
+	height: calc(100% - 2rem)
+	background-color: var(--bg-color)
+	box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15)
+	transform: translateX(calc(100% + 2rem))
+	transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)
+	display: flex
+	flex-direction: column
+	overflow: hidden
+	border-radius: 24px
+	border: 1px solid var(--border-color)
+
+	@media (max-width: 1024px)
+		max-width: 85%
+
+	@media (max-width: 768px)
+		max-width: 100%
+		top: 0
+		right: 0
+		bottom: 0
+		height: 100%
+		border-radius: 0
+		border: none
+		transform: translateX(100%)
+
+.product-view-content
+	display: flex
+	flex-direction: column
+	flex-grow: 1
+	padding: 1.5rem
+	gap: 1.5rem
+	height: 100%
+	overflow: hidden
+
+	@include respond-to($tablet)
+		flex-direction: row
+		padding: 2rem
+		gap: 2rem
+
+// === Product Image Section ===
+.product-image-section
+	flex: 1.2
+	display: flex
+	flex-direction: column
+	height: 100%
+	gap: 1rem
+	min-height: 0
+
+.main-image-container
+	position: relative
+	border-radius: 24px
+	padding: 2rem
+	display: flex
+	align-items: center
+	justify-content: center
+	flex: 7
+	min-height: 0
+
+.pv-main-image
+	max-width: 100%
+	max-height: 100%
+	object-fit: contain
+	filter: drop-shadow(0 15px 30px rgba(0,0,0,0.1))
+	transition: transform 0.3s ease
+
+.image-shadow
+	position: absolute
+	bottom: 10%
+	left: 50%
+	transform: translateX(-50%)
+	width: 60%
+	height: 20px
+	border-radius: 50%
+
+// === Gallery Indicators ===
+.gallery-indicators
+	display: flex
+	justify-content: center
+	align-items: center
+	gap: 0.5rem
+	padding: 0.5rem 0
+
+.indicator
+	width: 40px
+	height: 4px
+	background-color: var(--border-color)
+	border-radius: 2px
+	cursor: pointer
+	transition: width 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s ease
+
+	&.active
+		width: 60px
+		background-color: var(--primary-color)
+
+	&:hover:not(.active)
+		background-color: var(--secondary-text-color)
+
+// === Thumbnail Gallery ===
+.thumbnail-gallery
+	display: flex
+	gap: 0.75rem
+	align-items: stretch
+	flex: 3
+	min-height: 0
+
+.pv-thumbnail
+	flex: 1
+	max-width: 33.333%
+	border-radius: 12px
+	overflow: hidden
+	cursor: pointer
+	border: 1px solid var(--border-color)
+	transition: all 0.2s ease
+	display: flex
+	align-items: center
+	justify-content: center
+	padding: 8px
+
+	&:hover,
+	&.active
+		border-color: var(--primary-color)
+
+	img
+		max-width: 100%
+		max-height: 100%
+		object-fit: contain
+
+// === Full View Link ===
+.full-view-link-wrapper
+	display: flex
+	justify-content: flex-end
+	text-decoration: none
+	margin-top: auto
+
+// === Product Details Section ===
+.product-details-section
+	flex: 1
+	display: flex
+	flex-direction: column
+	justify-content: center
+	gap: 1.5rem
+
+.pv-header
+	.pv-brand
+		font-size: 0.85rem
+		color: var(--secondary-text-color)
+		text-transform: uppercase
+		letter-spacing: 1.5px
+		margin-bottom: 0.5rem
+
+	.pv-title
+		font-family: $font-family-heading
+		font-size: 2rem
+		color: var(--text-color)
+		margin-bottom: 1rem
+		line-height: 1.1
+		font-weight: 700
+
+		@include respond-to($tablet)
+			font-size: 2.5rem
+
+	.pv-rating
+		display: flex
+		align-items: center
+		color: var(--primary-color)
+
+		.stars
+			display: flex
+			gap: 0.25rem
+
+.pv-description
+	border-radius: 12px
+	font-size: 0.85rem
+	color: var(--secondary-text-color)
+	line-height: 1.5
+
+// === Size Selector ===
+.pv-sizes
+	display: flex
+	flex-wrap: wrap
+	gap: 0.5rem
+	align-items: center
+
+.size-option
+	display: flex
+	align-items: center
+	justify-content: center
+	min-width: 40px
+	height: 40px
+	padding: 0 0.75rem
+	border-radius: 8px
+	border: 1px solid var(--border-color)
+	cursor: pointer
+	font-size: 0.85rem
+	font-weight: 600
+	color: var(--text-color)
+	background-color: transparent
+	transition: all 0.2s ease
+
+	&:hover
+		border-color: var(--primary-color)
+		color: var(--primary-color)
+
+	&.selected
+		background-color: var(--primary-color)
+		border-color: var(--primary-color)
+		color: #fff
+
+// === Actions ===
+.pv-actions
+	display: flex
+	align-items: center
+	justify-content: space-between
+	margin-top: 1rem
+	padding-top: 1.5rem
+	border-top: 1px solid var(--border-color)
+	gap: 1rem
+
+	.price-block
+		display: flex
+		flex-direction: column
+
+		.label
+			font-size: 0.75rem
+			color: var(--secondary-text-color)
+			margin-bottom: 0.25rem
+
+		.price
+			font-size: 1.75rem
+			font-weight: 700
+			color: var(--text-color)
+
+// === Footer ===
+.product-view-footer
+	padding: 1.5rem 2rem
+	background-color: var(--secondary-bg)
+	display: flex
+	justify-content: flex-end
+
+	@include respond-to($tablet)
+		padding: 1.5rem 2.5rem
+
+.full-view-link
+	display: flex
+	align-items: center
+	gap: 1rem
+	text-decoration: none
+	color: var(--text-color)
+	padding: 1rem 1.5rem
+	background-color: var(--bg-color)
+	border-radius: 12px
+	transition: all 0.2s ease
+	box-shadow: 0 4px 12px rgba(0,0,0,0.05)
+
+	&:hover
+		transform: translateX(5px)
+		box-shadow: 0 6px 16px rgba(0,0,0,0.1)
+		color: var(--primary-color)
+
+	.text-content
+		display: flex
+		flex-direction: column
+		align-items: flex-end
+
+		.title
+			font-weight: 700
+			font-size: 1rem
+
+		.subtitle
+			font-size: 0.8rem
+			color: var(--secondary-text-color)

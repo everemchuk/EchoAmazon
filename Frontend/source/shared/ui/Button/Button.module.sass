@@ -1,0 +1,78 @@
+@use '@shared/styles/vars' as *
+
+.custom-btn
+	position: relative
+	padding: 1rem 2rem
+	font-size: 0.85rem
+	font-weight: 400
+	text-transform: uppercase
+	letter-spacing: 0.05rem
+	background: var(--bg-color)
+	border: 1px solid var(--primary-color)
+	cursor: pointer
+	overflow: hidden
+	z-index: 1
+	display: inline-flex
+	align-items: center
+	justify-content: center
+	gap: 0.75rem
+	white-space: nowrap
+
+// Variant styles
+.btn-sharp
+	border-radius: 0px
+
+.btn-smooth
+	border-radius: 0.5rem
+
+.btn-rounded
+	border-radius: 50px
+
+// Color styles
+.btn-color-primary
+	color: var(--primary-color)
+
+.btn-color-regular
+	color: var(--text-color)
+
+// Text
+.btn-text
+	position: relative
+	z-index: 2
+	transition: color 0.4s cubic-bezier(0.3, 1, 0.8, 1)
+
+// Arrow icon
+.btn-arrow
+	position: relative
+	z-index: 2
+	transition: color 0.4s cubic-bezier(0.3, 1, 0.8, 1), transform 0.3s ease
+
+// Skewed sliding overlay - starts off-screen, slides in on hover
+.custom-btn::before
+	content: ''
+	position: absolute
+	top: 0
+	left: -10%
+	width: 120%
+	height: 100%
+	background: var(--primary-color)
+	transform: skew(30deg) translate3d(-100%, 0, 0)
+	transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1)
+	z-index: 1
+
+// Hover - slide in the overlay
+.custom-btn:hover::before
+	transform: skew(30deg) translate3d(0, 0, 0)
+
+// Hover - change text and arrow color
+.custom-btn:hover .btn-text,
+.custom-btn:hover .btn-arrow
+	color: var(--text-color)
+
+// Hover - move arrow
+.custom-btn:hover .btn-arrow
+	transform: translateX(4px)
+
+// Active state
+.custom-btn:active
+	transform: scale(0.98)

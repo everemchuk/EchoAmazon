@@ -1,86 +1,234 @@
 ---
 import App from "@app/App.astro";
-import Logo from "@shared/ui/Logo/Logo.astro";
-import Button from "@shared/ui/Button/Button.astro";
+import { Slider } from "@features/Slider/Slider";
+import { Title } from "@shared/ui/Title/Title";
+import ProductCard from "@entities/ProductCard/ProductCard";
+import NewsCard from "@entities/NewsCard/NewsCard";
+
+import pufferJacket from "@shared/assets/images/vecteezy_a-boy-s-puffer-jacket-with-a-hood_53110050.png";
+import varsityJacket from "@shared/assets/images/vecteezy_generated-ai-yellow-varsity-jacket-isolated-on-transparent_48767912.png";
+import trackJacket from "@shared/assets/images/vecteezy_sporty-black-track-jacket-with-zipper_43023976.png";
+
+const bestDealsProducts = [
+	{
+		id: "1",
+		image: pufferJacket.src,
+		title: "Puffer Jacket",
+		brand: "Urban Style",
+		price: "$120.00",
+		rating: 4.5,
+	},
+	{
+		id: "2",
+		image: varsityJacket.src,
+		title: "Varsity Jacket",
+		brand: "College Prep",
+		price: "$150.00",
+		rating: 4.8,
+	},
+	{
+		id: "3",
+		image: trackJacket.src,
+		title: "Track Jacket",
+		brand: "Sporty",
+		price: "$85.00",
+		rating: 4.2,
+	},
+	{
+		id: "4",
+		image: pufferJacket.src,
+		title: "Winter Puffer",
+		brand: "Urban Style",
+		price: "$110.00",
+		rating: 4.9,
+	},
+	{
+		id: "5",
+		image: varsityJacket.src,
+		title: "Classic Varsity",
+		brand: "College Prep",
+		price: "$145.00",
+		rating: 4.6,
+	},
+	{
+		id: "6",
+		image: trackJacket.src,
+		title: "Performance Track",
+		brand: "Sporty",
+		price: "$90.00",
+		rating: 4.3,
+	},
+	{
+		id: "7",
+		image: pufferJacket.src,
+		title: "Puffer Jacket",
+		brand: "Urban Style",
+		price: "$120.00",
+		rating: 4.5,
+	},
+	{
+		id: "8",
+		image: varsityJacket.src,
+		title: "Varsity Jacket",
+		brand: "College Prep",
+		price: "$150.00",
+		rating: 4.8,
+	},
+	{
+		id: "9",
+		image: trackJacket.src,
+		title: "Track Jacket",
+		brand: "Sporty",
+		price: "$85.00",
+		rating: 4.2,
+	},
+	{
+		id: "10",
+		image: pufferJacket.src,
+		title: "Winter Puffer",
+		brand: "Urban Style",
+		price: "$110.00",
+		rating: 4.9,
+	},
+	{
+		id: "11",
+		image: varsityJacket.src,
+		title: "Classic Varsity",
+		brand: "College Prep",
+		price: "$145.00",
+		rating: 4.6,
+	},
+	{
+		id: "12",
+		image: trackJacket.src,
+		title: "Performance Track",
+		brand: "Sporty",
+		price: "$90.00",
+		rating: 4.3,
+	},
+];
+
+const newsItems = [
+	{
+		image:
+			"https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+		title: "Summer Collection Launch",
+		description: "Discover our new summer styles arriving next week.",
+		link: "#",
+	},
+	{
+		image:
+			"https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+		title: "Sustainability Goals 2026",
+		description: "We are committed to reducing our carbon footprint.",
+		link: "#",
+	},
+	{
+		image:
+			"https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+		title: "Tech Trends to Watch",
+		description: "The latest gadgets that are changing the way we live.",
+		link: "#",
+	},
+	{
+		image:
+			"https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+		title: "Fashion Week Highlights",
+		description: "Top trends from the runway to your wardrobe.",
+		link: "#",
+	},
+	{
+		image:
+			"https://images.unsplash.com/photo-1556740758-90de374c12ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+		title: "Customer Appreciation Day",
+		description: "Join us for special discounts and events.",
+		link: "#",
+	},
+];
 ---
 
-<App title="EchoAmazon - Home" activePage="home">
-	<div class="container">
-		<div class="logo-container">
-			<Logo />
-		</div>
-		<h1>Welcome to EchoAmazon</h1>
-		<p>Experience the future of shopping.</p>
-		<Button id="theme-toggle" class="theme-toggle-btn" text="Toggle Theme" variant="sharp" color="primary" />
-	</div>
+<App title="Home" activePage="home">
+	<main class="home-page">
+		<!-- Best Deals Section -->
+		<section class="section best-deals">
+			<Title client:load title="Best Deals">
+				Discover incredible savings on our top-rated products
+			</Title>
+			<Slider client:load>
+				{
+					bestDealsProducts.map((product) => (
+						<ProductCard
+							client:visible
+							id={product.id}
+							image={product.image}
+							title={product.title}
+							brand={product.brand}
+							price={product.price}
+							rating={product.rating}
+						/>
+					))
+				}
+			</Slider>
+		</section>
+
+		<!-- Top Sellers Section -->
+		<section class="section top-sellers">
+			<Title client:load title="Top Sellers">
+				Our most popular items loved by customers worldwide
+			</Title>
+			<Slider client:visible>
+				{
+					bestDealsProducts
+						.slice()
+						.reverse()
+						.map((product) => (
+							<ProductCard
+								client:visible
+								id={`top-${product.id}`}
+								image={product.image}
+								title={product.title}
+								brand={product.brand}
+								price={product.price}
+								rating={product.rating}
+							/>
+						))
+				}
+			</Slider>
+		</section>
+
+		<!-- Latest News Section -->
+		<section class="section latest-news">
+			<Title client:load title="Latest News">
+				Stay updated with the latest trends and announcements
+			</Title>
+			<Slider client:visible>
+				{
+					newsItems.map((item) => (
+						<NewsCard
+							client:visible
+							image={item.image}
+							title={item.title}
+							description={item.description}
+							link={item.link}
+						/>
+					))
+				}
+			</Slider>
+		</section>
+	</main>
 </App>
-
-<script>
-	function initThemeToggle() {
-		const toggleButton = document.getElementById("theme-toggle");
-		const htmlElement = document.documentElement;
-
-		if (!toggleButton) return;
-
-		// Clone to strip existing listeners
-		const newBtn = toggleButton.cloneNode(true);
-		toggleButton.parentNode?.replaceChild(newBtn, toggleButton);
-		const activeBtn = document.getElementById("theme-toggle");
-
-		activeBtn?.addEventListener("click", () => {
-			const currentTheme = htmlElement.getAttribute("data-theme");
-			const newTheme = currentTheme === "dark" ? "light" : "dark";
-			htmlElement.setAttribute("data-theme", newTheme);
-			localStorage.setItem("theme", newTheme);
-		});
-	}
-
-	// Run only on astro:page-load (handles initial load + transitions)
-	document.addEventListener("astro:page-load", initThemeToggle);
-</script>
 
 <style lang="sass">
 	@use '@shared/styles/vars' as *
 
+	.home-page
+		padding-bottom: 4rem
+
+	.section
+		margin-bottom: 3rem
+
 	.container
-		display: flex
-		flex-direction: column
-		align-items: center
-		justify-content: center
-		min-height: 80vh
-		text-align: center
-		padding: 1rem
-
+		padding: 0
 		@include respond-to($tablet)
-			padding: 2rem
-
-	.logo-container
-		width: 150px
-		margin-bottom: 1rem
-
-		@include respond-to($tablet)
-			width: 200px
-			margin-bottom: 2rem
-
-	h1
-		font-family: $font-family-heading
-		font-size: 2rem
-		margin-bottom: 0.5rem
-		color: var(--primary-color)
-
-		@include respond-to($tablet)
-			font-size: 3rem
-			margin-bottom: 1rem
-
-	p
-		font-size: 1rem
-
-		@include respond-to($tablet)
-			font-size: 1.25rem
-
-	.theme-toggle-btn
-		margin-top: 1.5rem
-
-		@include respond-to($tablet)
-			margin-top: 2rem
+			padding: 0
 </style>

@@ -1,0 +1,51 @@
+@use '@shared/styles/vars' as *
+
+.news-card
+	background: var(--bg-color)
+	border-radius: 1rem
+	overflow: hidden
+	border: 1px solid var(--border-color)
+	transition: transform 0.3s ease
+	width: 300px
+	display: flex
+	flex-direction: column
+	flex-shrink: 0 // Prevent shrinking in flex container
+
+	&:hover
+		transform: translateY(-5px)
+
+.news-image
+	height: 200px
+	background-size: cover
+	background-position: center
+	width: 100%
+
+.news-content
+	padding: 1.5rem
+	flex: 1
+	display: flex
+	flex-direction: column
+
+	h3
+		font-family: $font-family-heading
+		font-size: 1.25rem
+		margin-bottom: 0.5rem
+		color: var(--text-color)
+
+	p
+		font-size: 0.9rem
+		color: var(--secondary-text-color)
+		margin-bottom: 1rem
+		line-height: 1.5
+		flex: 1
+
+.read-more
+	color: var(--primary-color)
+	font-weight: 600
+	text-decoration: none
+	font-size: 0.9rem
+	margin-top: auto
+	display: inline-block
+
+	&:hover
+		text-decoration: underline

@@ -25,7 +25,9 @@
       "@shared/*": [
         "source/shared/*"
       ]
-    }
+    },
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
   },
   "exclude": [
     "build"

@@ -1,0 +1,79 @@
+@use '@shared/styles/vars' as *
+
+.toggle-btn
+	display: flex
+	align-items: center
+	justify-content: center
+	width: 40px
+	height: 40px
+	border-radius: 50%
+	background: var(--bg-color)
+	border: none
+	cursor: pointer
+	color: var(--text-color)
+	position: relative
+	padding: 0
+	overflow: visible
+
+.progress
+	position: absolute
+	width: 100%
+	height: 100%
+	top: 0
+	left: 0
+	transition: transform 0.4s cubic-bezier(0.7, 0, 0.3, 1)
+	pointer-events: none
+
+// Base circle - always visible
+.progress__circle
+	fill: none
+	stroke: var(--border-color)
+	stroke-width: 1px
+
+// Animated path - draws on hover
+.progress__path
+	fill: none
+	stroke: var(--primary-color)
+	stroke-width: 1px
+	stroke-dasharray: 1
+	stroke-dashoffset: 1
+	transition: stroke-dashoffset 0.4s cubic-bezier(0.7, 0, 0.3, 1)
+	transform: rotate(-90deg)
+	transform-origin: center
+
+// Hover states
+.toggle-btn:hover .progress
+	transform: scale3d(1.2, 1.2, 1)
+
+.toggle-btn:hover .progress__path
+	stroke-dashoffset: 0
+
+.toggle-btn:hover .arrow-icon
+	color: var(--primary-color)
+
+// Focus state
+.toggle-btn:focus-visible .progress__circle
+	fill: rgba(252, 196, 63, 0.2)
+
+// Active state
+.toggle-btn:active
+	transform: scale(0.95)
+
+.arrow-icon
+	transition: transform 0.3s ease-in-out, color 0.3s ease
+	position: relative
+	z-index: 1
+
+// Direction variants
+.toggle-btn.left .arrow-icon
+	transform: rotate(0deg)
+
+.toggle-btn.right .arrow-icon
+	transform: rotate(180deg)
+
+// Open state - flip arrow
+.toggle-btn.open.left .arrow-icon
+	transform: rotate(180deg)
+
+.toggle-btn.open.right .arrow-icon
+	transform: rotate(0deg)

@@ -1,9 +1,9 @@
 ---
 import "@shared/styles/global.sass";
 import Fonts from "@shared/ui/Fonts/Fonts.astro";
-import Sidebar from "@widgets/Sidebar/Sidebar.astro";
-import ProductQuickView from "@widgets/ProductQuickView/ProductQuickView.astro";
-import Preloader from "@features/Preloader/Preloader.astro";
+import { Sidebar } from "@widgets/Sidebar/Sidebar";
+import { ProductView } from "@widgets/ProductView/ProductView";
+// import { Preloader } from "@features/Preloader/Preloader";
 import { ViewTransitions, fade } from "astro:transitions";
 
 interface Props {
@@ -12,14 +12,7 @@ interface Props {
 	activePage?: string;
 }
 
-const {
-	title,
-	description = "EchoAmazon - Your one-stop shop",
-	activePage,
-} = Astro.props;
-
-// Base layout component wrapping all pages
-// Handles global styles, fonts, theme persistence, and view transitions
+const { title, description = "Your one-stop shop", activePage } = Astro.props;
 ---
 
 <!doctype html>
@@ -63,18 +56,18 @@ const {
 	</head>
 	<body>
 		<!-- Global Preloader -->
-		<!-- <Preloader /> -->
+		<!-- <Preloader client:load transition:persist="preloader" /> -->
 
 		<!-- Main App Layout: Sidebar + Content Area -->
 		<div class="app-layout">
-			<Sidebar activePage={activePage} />
+			<Sidebar activePage={activePage} client:load />
 			<main
 				class="main-content"
 				transition:animate={fade({ duration: "0.3s" })}
 			>
 				<slot />
 			</main>
-			<ProductQuickView />
+			<ProductView client:load transition:persist="product-view" />
 		</div>
 	</body>
 </html>
@@ -90,12 +83,12 @@ const {
 	.main-content
 		flex-grow: 1
 		width: 100%
-		padding: 1rem
-		padding-top: 4rem // Space for toggle button on mobile
+		padding: 0
+		padding-top: 4rem
 		transition: width 0.3s ease-in-out, margin-left 0.3s ease-in-out, padding 0.3s ease-in-out, transform 0.3s ease-in-out
 
 		@include respond-to($tablet)
-			padding: 2rem
+			padding: 0
 			padding-top: 2rem
 			width: calc(100% - 160px) // Sidebar (120px) + Gap (40px)
 			margin-left: 160px // Sidebar (120px) + Gap (40px)

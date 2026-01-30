@@ -1,0 +1,40 @@
+@use '@shared/styles/vars' as *
+
+.stars
+	display: flex
+	align-items: center
+	gap: 0.25rem
+	color: var(--primary-color)
+
+.star
+	flex-shrink: 0
+
+	&.star-empty
+		opacity: 0.3
+
+.stars-small
+	.star
+		width: 12px
+		height: 12px
+
+	.star-empty
+		width: 10px
+		height: 10px
+
+.stars-medium
+	.star
+		width: 16px
+		height: 16px
+
+	.star-empty
+		width: 12px
+		height: 12px
+
+.stars-large
+	.star
+		width: 20px
+		height: 20px
+
+	.star-empty
+		width: 16px
+		height: 16px
