@@ -16,13 +16,17 @@ export const Stars = (props: StarsProps) => {
 			<For each={Array.from({ length: 5 })}>
 				{(_, i) => {
 					const index = i()
-					if (props.rating >= index + 1) {
-						return <Icon name="star" class={`${styles.star} ${styles["star-filled"]}`} />
-					} else if (props.rating >= index + 0.5) {
-						return <Icon name="star-half" class={`${styles.star} ${styles["star-filled"]}`} />
-					} else {
-						return <Icon name="star-outline" class={`${styles.star} ${styles["star-empty"]}`} />
-					}
+					return (
+						<>
+							{props.rating >= index + 1 ? (
+								<Icon name="star" class={`${styles.star} ${styles["star-filled"]}`} />
+							) : props.rating >= index + 0.5 ? (
+								<Icon name="star-half" class={`${styles.star} ${styles["star-filled"]}`} />
+							) : (
+								<Icon name="star-outline" class={`${styles.star} ${styles["star-empty"]}`} />
+							)}
+						</>
+					)
 				}}
 			</For>
 		</div>

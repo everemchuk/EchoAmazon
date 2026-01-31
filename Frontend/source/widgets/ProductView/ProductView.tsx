@@ -1,17 +1,17 @@
 import { createSignal, createEffect, onMount, onCleanup, Show, For } from "solid-js"
 import { useStore } from "@nanostores/solid"
 import { isProductViewOpen, setProductViewOpen, activeProduct } from "@shared/state/productView"
-import { Icon } from "@shared/ui/Icon/Icon"
+import { Tooltip } from "@shared/ui/Tooltip/Tooltip"
 import { Button } from "@shared/ui/Button/Button"
 import { Toggle } from "@shared/ui/Toggle/Toggle"
 import { Stars } from "@shared/ui/Stars/Stars"
+import { Gallery } from "@features/Gallery/Gallery"
 import styles from "./ProductView.module.sass"
 
 export const ProductView = () => {
 	const isOpen = useStore(isProductViewOpen)
 	const product = useStore(activeProduct)
-	const [activeThumb, setActiveThumb] = createSignal(0)
-	const [selectedSize, setSelectedSize] = createSignal("XL")
+	const [selectedSize, setSelectedSize] = createSignal("")
 
 	const sizes = ["XS", "S", "M", "L", "XL"]
 
@@ -36,15 +36,14 @@ export const ProductView = () => {
 		}
 	}
 
-	const handleThumbClick = (index: number) => {
-		setActiveThumb(index)
-	}
-
 	// Reset state when product changes
 	createEffect(() => {
 		if (product()) {
-			setActiveThumb(0)
-			setSelectedSize("XL")
+			if (product()?.selectedSize) {
+				setSelectedSize(product()!.selectedSize!)
+			} else {
+				setSelectedSize("")
+			}
 		}
 	})
 
@@ -89,42 +88,11 @@ export const ProductView = () => {
 			<div class={styles["product-view-panel"]}>
 				<div class={styles["product-view-content"]}>
 					{/* Product Image Section */}
-					<div class={styles["product-image-section"]}>
-						<div class={styles["main-image-container"]}>
-							<img
-								src={product()?.image || ""}
-								alt={product()?.title || "Product Image"}
-								class={styles["pv-main-image"]}
-							/>
-							<div class={styles["image-shadow"]}></div>
-						</div>
-
-						{/* Gallery Navigation Indicators */}
-						<div class={styles["gallery-indicators"]}>
-							<For each={[0, 1, 2]}>
-								{(index) => (
-									<span
-										class={`${styles.indicator} ${activeThumb() === index ? styles.active : ""}`}
-										onClick={() => handleThumbClick(index)}
-									></span>
-								)}
-							</For>
-						</div>
-
-						{/* Thumbnail Gallery */}
-						<div class={styles["thumbnail-gallery"]}>
-							<For each={[0, 1, 2]}>
-								{(index) => (
-									<div
-										class={`${styles["pv-thumbnail"]} ${activeThumb() === index ? styles.active : ""}`}
-										onClick={() => handleThumbClick(index)}
-									>
-										<img src={product()?.image || ""} alt={`Thumbnail ${index + 1}`} />
-									</div>
-								)}
-							</For>
-						</div>
-					</div>
+					<Gallery
+						images={[product()?.image || "", product()?.image || "", product()?.image || ""]}
+						title={product()?.title}
+						class={styles["product-image-section"]}
+					/>
 
 					{/* Product Details Section */}
 					<div class={styles["product-details-section"]}>
@@ -133,7 +101,10 @@ export const ProductView = () => {
 							<h2 class={styles["pv-title"]}>{product()?.title || "Product Title"}</h2>
 
 							<div class={styles["pv-rating"]}>
-								<Stars rating={product()?.rating || 0} size="medium" />
+								<div class={styles["stars-wrapper"]}>
+									<Stars rating={product()?.rating || 0} size="medium" />
+									<Tooltip text={`${product()?.rating || 0}`} position="right" color="primary" />
+								</div>
 							</div>
 						</div>
 
@@ -164,7 +135,7 @@ export const ProductView = () => {
 							<Button
 								text="Add To Cart"
 								color="primary"
-								variant="sharp"
+								variant="smooth"
 								class="add-to-cart-btn"
 								onClick={() => console.log("Added to cart:", product())}
 							/>
@@ -173,12 +144,12 @@ export const ProductView = () => {
 						<a
 							href={`/product/${product()?.id || "1"}`}
 							class={styles["full-view-link-wrapper"]}
-							onClick={close}
+							data-astro-reload
 						>
 							<Button
 								text="Go To Product Page"
 								color="primary"
-								variant="sharp"
+								variant="smooth"
 								showArrow={true}
 								class="full-view-btn"
 							/>

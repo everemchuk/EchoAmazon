@@ -43,7 +43,9 @@
 		// Show toggle when active
 		.pv-close-toggle
 			opacity: 1
+			opacity: 1
 			pointer-events: auto
+			cursor: pointer
 			transform: translateX(0)
 
 .product-view-backdrop
@@ -195,6 +197,10 @@
 	justify-content: flex-end
 	text-decoration: none
 	margin-top: auto
+	cursor: pointer
+
+	button
+		cursor: pointer
 
 // === Product Details Section ===
 .product-details-section
@@ -227,6 +233,19 @@
 		display: flex
 		align-items: center
 		color: var(--primary-color)
+
+		.stars-wrapper
+			position: relative
+			margin-left: 0.5rem
+			cursor: pointer
+			display: flex
+			align-items: center
+
+			&:hover
+				:global(.tooltip)
+					opacity: 1
+					visibility: visible
+					transform: translateY(-50%) translateX(0)
 
 		.stars
 			display: flex
@@ -279,6 +298,9 @@
 	padding-top: 1.5rem
 	border-top: 1px solid var(--border-color)
 	gap: 1rem
+
+	button
+		cursor: pointer
 
 	.price-block
 		display: flex

@@ -1,10 +1,9 @@
 import { createSignal, onMount, onCleanup, For } from "solid-js"
 import { colorExtractor } from "@shared/helpers/colorExtractor"
 import styles from "./ProductCard.module.sass"
-import { Icon } from "@shared/ui/Icon/Icon"
 import { Tooltip } from "@shared/ui/Tooltip/Tooltip"
+import { Icon } from "@shared/ui/Icon/Icon"
 import { Button } from "@shared/ui/Button/Button"
-import { IconButton } from "@shared/ui/IconButton/IconButton"
 import { Loader } from "@shared/ui/Loader/Loader"
 import { Stars } from "@shared/ui/Stars/Stars"
 import { setActiveProduct, setProductViewOpen } from "@shared/state/productView"
@@ -20,22 +19,21 @@ interface Props {
 
 export default function ProductCard(props: Props) {
 	const [loading, setLoading] = createSignal(true)
-	const [selectedSize, setSelectedSize] = createSignal<string | null>(null)
 	let imgRef: HTMLImageElement | undefined
 	let bgShapeRef: HTMLDivElement | undefined
 
 
-	const handleQuickView = (e: MouseEvent) => {
+	const handleProductView = (e: MouseEvent) => {
 		e.preventDefault()
 		e.stopPropagation()
 
 		const productData = {
+			id: props.id,
 			image: props.image,
 			title: props.title,
 			brand: props.brand,
 			price: props.price,
-			id: props.id,
-			rating: props.rating, // Pass rating to ProductView store
+			rating: props.rating,
 		}
 
 		setActiveProduct(productData)
@@ -122,39 +120,20 @@ export default function ProductCard(props: Props) {
 						<Tooltip text={`${props.rating}`} position="right" color="primary" />
 					</div>
 
-					<div class={styles.sizes}>
-						<For each={["XS", "S", "M", "L", "XL"]}>
-							{(size) => (
-								<span
-									class={selectedSize() === size ? styles.selected : ""}
-									onClick={(e) => {
-										e.preventDefault()
-										setSelectedSize(size)
-									}}
-								>
-									{size}
-								</span>
-							)}
-						</For>
-					</div>
-
 					<div class={styles.actions}>
 						<Button
 							text="SEE PRODUCT"
 							variant="smooth"
 							color="primary"
-							class={styles["quick-view-btn"]}
-							onClick={handleQuickView}
+							onClick={handleProductView}
 						/>
-						<IconButton
-							icon="shopping-cart-add"
-							ariaLabel="Add to cart"
-							class="js-add-to-cart"
-							variant="outline"
-							color="primary"
-							shape="rounded"
+						<button
+							class={styles["icon-btn"]}
+							aria-label="Add to cart"
 							onClick={handleAddToCart}
-						/>
+						>
+							<Icon name="shopping-cart-add" size={20} />
+						</button>
 					</div>
 				</div>
 			</div>

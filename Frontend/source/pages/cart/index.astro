@@ -7,6 +7,7 @@ import App from "@app/App.astro";
 <App title="Cart" activePage="cart">
 	<div class="page-header">
 		<h1>Your Cart</h1>
+		<button id="theme-toggle" class="theme-btn">Toggle Theme</button>
 	</div>
 	<div class="page-content">
 		<p>Your shopping cart is empty.</p>
@@ -18,12 +19,60 @@ import App from "@app/App.astro";
 
 	.page-header
 		margin-bottom: 2rem
+		display: flex
+		align-items: center
+		justify-content: space-between
 
 		h1
 			font-family: $font-family-heading
 			font-size: 2.5rem
 			color: var(--text-color)
 
+	.theme-btn
+		padding: 0.75rem 1.5rem
+		border: 1px solid var(--border-color)
+		border-radius: 0.5rem
+		background: transparent
+		cursor: pointer
+		color: var(--text-color)
+		font-size: 0.9rem
+		transition: all 0.2s ease
+
+		&:hover
+			border-color: var(--primary-color)
+			color: var(--primary-color)
+
 	.page-content
 		color: var(--text-color)
 </style>
+
+<script is:inline>
+	console.log("Cart page script loaded");
+	const initThemeToggle = () => {
+		console.log("Initializing theme toggle");
+		const toggleBtn = document.getElementById("theme-toggle");
+		if (toggleBtn) {
+			console.log("Theme button found");
+			// Remove old listener to avoid duplicates if any (though simple function ref creation avoids named removal issues, anonymous ones stack)
+			// Simplest is to clone node or just ensure we don't bind twice if we can helped it.
+			// But for now, just add.
+			toggleBtn.onclick = () => {
+				console.log("Theme button clicked");
+				const current = document.documentElement.getAttribute("data-theme");
+				const next = current === "dark" ? "light" : "dark";
+				console.log(`Toggling theme from ${current} to ${next}`);
+				document.documentElement.setAttribute("data-theme", next);
+				localStorage.setItem("theme", next);
+			};
+		} else {
+			console.log("Theme button NOT found");
+		}
+	};
+
+	// Run immediately if DOM is ready (is:inline runs during parsing)
+	// But elements above might be parsed.
+	initThemeToggle();
+
+	// Handle view transitions
+	document.addEventListener("astro:page-load", initThemeToggle);
+</script>

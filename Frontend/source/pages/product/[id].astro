@@ -1,10 +1,10 @@
 ---
 import App from "@app/App.astro";
 import { Button } from "@shared/ui/Button/Button";
-import { IconButton } from "@shared/ui/IconButton/IconButton";
 import { Toggle } from "@shared/ui/Toggle/Toggle";
 import { Tooltip } from "@shared/ui/Tooltip/Tooltip";
 import { Icon } from "astro-icon/components";
+import { Gallery } from "@features/Gallery/Gallery";
 import pufferJacket from "@shared/assets/images/vecteezy_a-boy-s-puffer-jacket-with-a-hood_53110050.png";
 import varsityJacket from "@shared/assets/images/vecteezy_generated-ai-yellow-varsity-jacket-isolated-on-transparent_48767912.png";
 import trackJacket from "@shared/assets/images/vecteezy_sporty-black-track-jacket-with-zipper_43023976.png";
@@ -98,39 +98,13 @@ const product = productsData[id] || productsData["1"];
 	<div class="product-page">
 		<div class="product-page-content">
 			<!-- Product Image Section -->
-			<div class="product-image-section">
-				<div class="main-image-container">
-					<img
-						src={product.image}
-						alt={product.title}
-						class="pp-main-image"
-						id="main-product-image"
-					/>
-
-					<!-- Image Shadow -->
-					<div class="image-shadow"></div>
-				</div>
-
-				<!-- Gallery Navigation Indicators -->
-				<div class="gallery-indicators">
-					<span class="indicator active"></span>
-					<span class="indicator"></span>
-					<span class="indicator"></span>
-				</div>
-
-				<!-- Thumbnail Gallery -->
-				<div class="thumbnail-gallery">
-					<div class="pp-thumbnail active">
-						<img src={product.image} alt="View 1" />
-					</div>
-					<div class="pp-thumbnail">
-						<img src={product.image} alt="View 2" />
-					</div>
-					<div class="pp-thumbnail">
-						<img src={product.image} alt="View 3" />
-					</div>
-				</div>
-			</div>
+			<!-- Product Image Section -->
+			<Gallery
+				images={[product.image, product.image, product.image]}
+				title={product.title}
+				class="product-image-section"
+				client:load
+			/>
 
 			<!-- Product Details Section -->
 			<div class="product-details-section">
@@ -227,18 +201,14 @@ const product = productsData[id] || productsData["1"];
 						<Button
 							text="Add To Cart"
 							color="primary"
-							variant="sharp"
-							showArrow={true}
+							variant="smooth"
+							showArrow={false}
 							class="add-to-cart-btn"
 						/>
-						<IconButton
-							icon="heart"
-							ariaLabel="Add to wishlist"
-							class="wishlist-btn"
-							variant="outline"
-							color="regular"
-							shape="rounded"
-						/>
+						<button class="icon-btn wishlist-btn" aria-label="Add to wishlist">
+							<Icon name="bookmark" class="icon-regular" size={24} />
+							<Icon name="bookmark-active" class="icon-active" size={24} />
+						</button>
 					</div>
 				</div>
 
@@ -606,7 +576,50 @@ const product = productsData[id] || productsData["1"];
 		.action-buttons
 			display: flex
 			gap: 0.75rem
-			align-items: center
+			align-items: stretch // Stretch items to match height if one is taller, but we will force height
+			height: 3.5rem // Enforce container height
+
+			:global(.add-to-cart-btn)
+				height: 100%
+				display: flex
+				align-items: center
+
+			.icon-btn
+				display: flex
+				align-items: center
+				justify-content: center
+				cursor: pointer
+				transition: all 0.2s ease
+				border: 1px solid var(--primary-color)
+				background: transparent
+				padding: 0
+				width: 3.5rem
+				height: 100%
+				border-radius: 0.5rem // Rounded corners
+				position: relative
+				color: var(--primary-color)
+
+				.icon-active
+					display: none
+
+				.icon-regular
+					display: block
+
+				&.active
+					background-color: transparent
+					color: var(--primary-color)
+
+					.icon-active
+						display: block
+					.icon-regular
+						display: none
+
+				&:hover
+					background-color: var(--primary-color)
+					color: var(--text-color)
+
+				&:active
+					transform: scale(0.95)
 
 	// === Delivery Info ===
 	.pp-delivery
@@ -684,42 +697,7 @@ const product = productsData[id] || productsData["1"];
 		});
 	};
 
-	// Thumbnail Selection
-	const initThumbnails = () => {
-		const thumbnails = document.querySelectorAll(".pp-thumbnail");
-		const mainImage = document.getElementById(
-			"main-product-image",
-		) as HTMLImageElement;
-		const indicators = document.querySelectorAll(
-			".gallery-indicators .indicator",
-		);
-
-		thumbnails.forEach((thumb, index) => {
-			thumb.addEventListener("click", () => {
-				thumbnails.forEach((t) => t.classList.remove("active"));
-				thumb.classList.add("active");
-
-				// Update indicators
-				indicators.forEach((ind, i) => {
-					ind.classList.toggle("active", i === index);
-				});
-
-				const thumbImg = thumb.querySelector("img") as HTMLImageElement;
-				if (thumbImg && mainImage) {
-					mainImage.src = thumbImg.src;
-				}
-			});
-		});
-
-		// Indicator clicks
-		indicators.forEach((ind, index) => {
-			ind.addEventListener("click", () => {
-				if (thumbnails[index]) {
-					(thumbnails[index] as HTMLElement).click();
-				}
-			});
-		});
-	};
+	// Thumbnail Selection Logic Removed (handled by ImageGallery component)
 
 	// Color Selection Logic
 	const initColorSelector = () => {
@@ -742,11 +720,21 @@ const product = productsData[id] || productsData["1"];
 		});
 	};
 
+	// Wishlist Button Logic
+	const initWishlistButton = () => {
+		const wishlistBtn = document.querySelector(".wishlist-btn");
+		if (wishlistBtn) {
+			wishlistBtn.addEventListener("click", () => {
+				wishlistBtn.classList.toggle("active");
+			});
+		}
+	};
+
 	// Initialize
 	const initProductPage = () => {
 		initSizeSelector();
-		initThumbnails();
 		initColorSelector();
+		initWishlistButton();
 	};
 
 	initProductPage();

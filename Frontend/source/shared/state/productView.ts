@@ -8,6 +8,7 @@ export interface Product {
 	image: string
 	rating: number
 	description?: string
+	selectedSize?: string
 }
 
 export const isProductViewOpen = atom(false)
